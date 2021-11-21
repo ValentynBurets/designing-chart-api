@@ -14,10 +14,9 @@ namespace Domain.Entity
         public int MaxMark { get; set; }
         public DateTime ExpirationDate { get; set; }
         public StatusType StatusType { get; set; }
-        public virtual CategoryType CategoryType { get; set; }
         public Guid CategoryId { get; set; }
-        public virtual Chart EtalonChart { get; set; }
-        public Guid EtalonChartId {get; set;}
+        public string EtalonChart { get; set; }
+        public virtual CategoryType CategoryType { get; set; }
         public virtual ICollection<Attempt> Attempts { get; set; }
     }
 }

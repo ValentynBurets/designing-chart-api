@@ -9,5 +9,7 @@ namespace Domain.Entity
     public class CategoryType: EntityBase
     {
         public string Name { get; set; }
+
+        public virtual ICollection<Exercise> Exercises { get; set; }
     }
 }

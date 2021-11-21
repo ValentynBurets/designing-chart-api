@@ -9,58 +9,58 @@ namespace Data.EF
         {
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    //Exercise
-        //    modelBuilder.Entity<Exercise>()
-        //        .HasIndex(i => i.Id)
-        //        .IsUnique(true);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //Admin
+            modelBuilder.Entity<Admin>()
+                .HasIndex(i => i.Id)
+                .IsUnique(true);
 
-        //    modelBuilder.Entity<Exercise>()
-        //        .HasOne(s => s.CategoryType)
-        //        .WithMany()
-        //        .HasForeignKey(k => k.CategoryId);
+            //Attempt
+            modelBuilder.Entity<Attempt>()
+                .HasIndex(i => i.Id)
+                .IsUnique(true);
 
-        //    //Attempt
-        //    modelBuilder.Entity<Attempt>()
-        //        .HasIndex(i => i.Id)
-        //        .IsUnique(true);
+            modelBuilder.Entity<Attempt>()
+                .HasOne(i => i.Student)
+                .WithMany(a => a.Attempts)
+                .HasForeignKey(k => k.StudentId)
+                .IsRequired(true);
 
-        //    modelBuilder.Entity<Attempt>()
-        //        .HasOne(i => i.Student)
-        //        .WithMany(a => a.Attempts)
-        //        .HasForeignKey(k => k.StudentId)
-        //        .IsRequired(true);
+            modelBuilder.Entity<Attempt>()
+                .HasOne(i => i.Exercise)
+                .WithMany(a => a.Attempts)
+                .HasForeignKey(k => k.ExerciseId)
+                .IsRequired(true);
 
-        //    modelBuilder.Entity<Attempt>()
-        //        .HasOne(i => i.Exercise)
-        //        .WithOne()
-        //        .IsRequired(true);
+            //Category
+            modelBuilder.Entity<CategoryType>()
+                .HasIndex(i => i.Id)
+                .IsUnique(true);
 
-        //    modelBuilder.Entity<Attempt>()
-        //        .HasOne(i => i.Chart)
-        //        .WithOne()
-        //        .IsRequired(true);
+            //Exercise
+            modelBuilder.Entity<Exercise>()
+                .HasIndex(i => i.Id)
+                .IsUnique(true);
 
-        //    //Student
-        //    modelBuilder.Entity<Student>()
-        //        .HasIndex(i => i.Id)
-        //        .IsUnique(true);
+            modelBuilder.Entity<Exercise>()
+                .HasOne(e => e.CategoryType)
+                .WithMany(c => c.Exercises)
+                .HasForeignKey(k => k.CategoryId);
 
-        //    //Admin
-        //    modelBuilder.Entity<Admin>()
-        //        .HasIndex(i => i.Id)
-        //        .IsUnique(true);
+            //Student
+            modelBuilder.Entity<Student>()
+                .HasIndex(i => i.Id)
+                .IsUnique(true);
 
-        //    //Category
-        //    modelBuilder.Entity<CategoryType>()
-        //        .HasIndex(i => i.Id)
-        //        .IsUnique(true);
-        //}
+            //Admin
+            modelBuilder.Entity<Admin>()
+                .HasIndex(i => i.Id)
+                .IsUnique(true);
+        }
 
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Attempt> Attempts { get; set; }
-        public DbSet<Chart> Charts { get; set; }
         public DbSet<Student> Studens { get; set; }
         public DbSet<CategoryType> CategoryTypes { get; set; }
     }
