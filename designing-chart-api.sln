@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "designing-chart-api", "desi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{240E96BD-CA0B-4958-B7D9-A86199FA9578}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{240E96BD-CA0B-4958-B7D9-A86199FA9578}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{240E96BD-CA0B-4958-B7D9-A86199FA9578}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{240E96BD-CA0B-4958-B7D9-A86199FA9578}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{240E96BD-CA0B-4958-B7D9-A86199FA9578}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

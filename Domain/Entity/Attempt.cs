@@ -12,7 +12,10 @@ namespace Domain.Entity
         public DateTime FinishTime { get; set; }
         public double Mark { get; set; }
         public virtual Exercise Exercise { get; set; }
+        public Guid ExerciseId { get; set; }
         public virtual Student Student { get; set; }
+        public Guid StudentId { get; set; }
         public virtual Chart Chart { get; set; }
+        public Guid ChartId { get; set; }
     }
 }

@@ -8,6 +8,9 @@ namespace Domain.Entity
 {
     public class Chart: EntityBase
     {
-        public string Data { get; set; }   
+        public string Data { get; set; }
+
+        public virtual ICollection<Exercise> Exercises { get; set; }
+        public virtual ICollection<Attempt> Attempts { get; set; }
     }
 }

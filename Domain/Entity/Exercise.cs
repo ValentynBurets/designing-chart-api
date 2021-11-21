@@ -15,6 +15,9 @@ namespace Domain.Entity
         public DateTime ExpirationDate { get; set; }
         public StatusType StatusType { get; set; }
         public virtual CategoryType CategoryType { get; set; }
+        public Guid CategoryId { get; set; }
         public virtual Chart EtalonChart { get; set; }
+        public Guid EtalonChartId {get; set;}
+        public virtual ICollection<Attempt> Attempts { get; set; }
     }
 }
