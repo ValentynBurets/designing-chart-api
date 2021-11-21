@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "designing-chart-api", "designing-chart-api\designing-chart-api.csproj", "{B067EB23-8039-406B-BD10-99EC80DF006A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B067EB23-8039-406B-BD10-99EC80DF006A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B067EB23-8039-406B-BD10-99EC80DF006A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B067EB23-8039-406B-BD10-99EC80DF006A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B067EB23-8039-406B-BD10-99EC80DF006A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F53A4357-9BF9-4A2A-89C5-9959C5D8F25F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3B67DC0-0CAB-41CD-A18E-0E72D692FEBB}
+	EndGlobalSection
+EndGlobal
