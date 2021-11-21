@@ -1,4 +1,5 @@
 ﻿using Domain.Entity;
+using Domain.Entity.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,8 @@ namespace Domain.Repository
 {
     public interface IExerciseRepository : IEntityRepository<Exercise>
     {
-        Task<IEnumerable<Exercise>> GetByTitle(Guid title);
-        Task<IEnumerable<Exercise>> GetByStudent(Guid studentId);
-        Task<IEnumerable<Exercise>> GetByStatus(string status);
+        Task<Exercise> GetByTitle(string title);
+        Task<IEnumerable<Exercise>> GetByStatus(StatusType status);
         Task<IEnumerable<Exercise>> GetByCategory(string category);
     }
 }

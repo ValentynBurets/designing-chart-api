@@ -10,6 +10,6 @@ namespace Domain.Repository
     public interface IAttemptRepository : IEntityRepository<Attempt>
     {
         Task<IEnumerable<Attempt>> GetByStudentId(Guid studentId);
-        Task<Attempt> GetByExerciseId(Guid exerciseId);
+        Task<IEnumerable<Attempt>> GetByExerciseId(Guid exerciseId);
     }
 }
