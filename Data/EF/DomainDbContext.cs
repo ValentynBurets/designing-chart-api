@@ -11,6 +11,7 @@ namespace Data.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             //Admin
             modelBuilder.Entity<Admin>()
                 .HasIndex(i => i.Id)

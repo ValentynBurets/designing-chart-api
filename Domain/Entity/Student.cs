@@ -8,6 +8,11 @@ namespace Domain.Entity
 {
     public class Student: User
     {
+        public Student()
+        {
+            Attempts = new HashSet<Attempt>();
+        }
+        
         public virtual ICollection<Attempt> Attempts { get; set; }
     }
 }

@@ -9,6 +9,11 @@ namespace Domain.Entity
 {
     public class Exercise : EntityBase
     {
+        public Exercise()
+        {
+            Attempts = new HashSet<Attempt>();
+        }
+
         public string Title { get; set; }
         public string Description { get; set; }
         public int MaxMark { get; set; }
