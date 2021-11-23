@@ -40,6 +40,8 @@ namespace Api
 
             services.AddControllers();
             services.AddRepository();
+
+            services.AddAutoMapper(typeof(MapperInitializer));
             
             services.AddSwaggerGen(c =>
             {

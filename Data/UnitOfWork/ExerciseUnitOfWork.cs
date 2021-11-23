@@ -16,7 +16,8 @@ namespace Data.UnitOfWork
         private IAttemptRepository _attemptRepository;
         private ICategoryRepository _categoryRepository;
         private IExerciseRepository _exerciseRepository;
-        
+        private IStudentRepository _studentRepository;
+
         public ExerciseUnitOfWork(DomainDbContext exercisesDbContext)
         {
             _dbContext = exercisesDbContext;
@@ -28,6 +29,8 @@ namespace Data.UnitOfWork
         public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_dbContext);
 
         public IExerciseRepository ExerciseRepository => _exerciseRepository ??= new ExerciseRepository(_dbContext);
+
+        public IStudentRepository StudentRepository => _studentRepository ??= new StudentRepository(_dbContext);
 
         public async Task<int> Save() => await _dbContext.SaveChangesAsync();
     }

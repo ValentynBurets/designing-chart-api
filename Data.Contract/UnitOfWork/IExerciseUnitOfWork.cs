@@ -13,5 +13,6 @@ namespace Data.Contract.UnitOfWork
         IAttemptRepository AttemptRepository { get; }
         ICategoryRepository CategoryRepository { get; }
         IExerciseRepository ExerciseRepository { get; }
+        IStudentRepository StudentRepository { get; }
     }
 }

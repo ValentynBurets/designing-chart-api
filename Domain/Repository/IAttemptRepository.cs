@@ -11,5 +11,6 @@ namespace Domain.Repository
     {
         Task<IEnumerable<Attempt>> GetByStudentId(Guid studentId);
         Task<IEnumerable<Attempt>> GetByExerciseId(Guid exerciseId);
+        Task<Attempt> GetByChart(string chart);
     }
 }

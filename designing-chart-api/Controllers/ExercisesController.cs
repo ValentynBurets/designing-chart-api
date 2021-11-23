@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Business.Contract.Model;
+using Business.Contract.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,79 +11,104 @@ namespace designing_chart_api.Controllers
 {
     public class ExercisesController : Controller
     {
-        // GET: ExercisesController
-        public ActionResult Index()
+        private readonly IExerciseService _exerciseService;
+                                          
+        public ExercisesController(IExerciseService exerciseService)
         {
-            return View();
+            _exerciseService = exerciseService;
         }
 
-        // GET: ExercisesController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        //// GET: ExercisesController
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
 
-        // GET: ExercisesController/Create
-        public ActionResult Create()
+        //// GET: ExercisesController/Details/5
+        //public ActionResult Details(int id)
+        //{
+        //    return View();
+        //}
+
+        //// GET: ExercisesController/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
+
+        // GET: ExercisesController/GetAll
+        public async Task<ActionResult> GetAll()
         {
-            return View();
+            try
+            {
+                var exercises = await _exerciseService.GetAll();
+                return Ok(exercises);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
         // POST: ExercisesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateExerciseViewModel newExercise)
         {
             try
-            {
-                return RedirectToAction(nameof(Index));
+            {         
+                await _exerciseService.Create(newExercise);
+                return Ok("New exercise created!");
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return BadRequest(ex.ToString());
             }
-        }
-
-        // GET: ExercisesController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
         }
 
         // POST: ExercisesController/Edit/5
-        [HttpPost]
+        [HttpPut]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(Guid id, CreateExerciseViewModel exercise)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _exerciseService.Edit(id, exercise);
+                return Accepted("Сhanges applied!");
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return BadRequest(ex.ToString());
             }
         }
 
         // GET: ExercisesController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ExercisesController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _exerciseService.Delete(id);
+                return Accepted("Exercise deleted!");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return BadRequest(ex.ToString());
             }
         }
+
+        //// POST: ExercisesController/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }

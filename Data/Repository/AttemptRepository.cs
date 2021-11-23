@@ -26,5 +26,10 @@ namespace Data.Repository
         {
             return await _DbContext.Attempts.Where(e => e.StudentId == studentId).ToListAsync();
         }
+        
+        public async Task<Attempt> GetByChart(string chart)
+        {
+            return await _DbContext.Attempts.FirstAsync(c => c.Chart == chart);
+        }
     }
 }
