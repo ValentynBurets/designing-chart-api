@@ -14,10 +14,10 @@ namespace Business.Services
 {
     public class AttemptService : IAttemptService
     {
-        private Mapper _mapper;
+        private IMapper _mapper;
         private readonly IExerciseUnitOfWork _unitOfWork;
 
-        public AttemptService(Mapper mapper, IExerciseUnitOfWork unitOfWork)
+        public AttemptService(IMapper mapper, IExerciseUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;

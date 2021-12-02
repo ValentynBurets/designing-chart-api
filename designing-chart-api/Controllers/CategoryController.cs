@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace designing_chart_api.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -37,7 +39,6 @@ namespace designing_chart_api.Controllers
 
         // GET: CategoryController/GetAll
         [HttpGet]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> GetAll()
         {
             try

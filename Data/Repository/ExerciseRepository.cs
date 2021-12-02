@@ -23,22 +23,22 @@ namespace Data.Repository
             return await _DbContext.Exercises.Where(e => e.CategoryType.Name == category).ToListAsync();
         }
 
-        public async Task<IEnumerable<Exercise>> GetByDate(string sortOrder)
+        public async Task<IEnumerable<Exercise>> GetByDate()
         {
             return await _DbContext.Exercises.OrderBy(e => e.ExpirationDate).ToListAsync();
         }
 
-        public async Task<IEnumerable<Exercise>> GetByDateDesc(string sortOrder)
+        public async Task<IEnumerable<Exercise>> GetByDateDesc()
         {
             return await _DbContext.Exercises.OrderByDescending(e => e.ExpirationDate).ToListAsync();
         }
 
-        public async Task<IEnumerable<Exercise>> GetByName(string sortOrder)
+        public async Task<IEnumerable<Exercise>> GetByName()
         {
             return await _DbContext.Exercises.OrderBy(e => e.Title).ToListAsync();
         }
 
-        public async Task<IEnumerable<Exercise>> GetByNameDesc(string sortOrder)
+        public async Task<IEnumerable<Exercise>> GetByNameDesc()
         {
             return await _DbContext.Exercises.OrderByDescending(e => e.Title).ToListAsync();
         }

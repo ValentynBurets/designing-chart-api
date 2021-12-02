@@ -8,8 +8,9 @@ namespace Domain.Entity.Constants
 {
     public enum StatusType
     {
-        Passed = 0,
-        InProgress = 1,
-        Expired = 2
+        Active = 0,
+        Passed = 1,
+        InProgress = 2,
+        Expired = 3
     }
 }
