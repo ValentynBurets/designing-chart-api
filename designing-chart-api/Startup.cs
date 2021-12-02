@@ -1,5 +1,8 @@
+using Business.Contract.Services;
+using Business.Services;
 using Data.EF;
 using designing_chart_api.Configurations;
+using designing_chart_api.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserIdentity.Data;
 
 namespace Api
 {
@@ -34,12 +38,28 @@ namespace Api
         {
             services.AddDbContext<DomainDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("sqlConnection")));
+            
+            services.AddDbContext<IdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("sqlIdentityConnection")));
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+
+            services.ConfigureIdentity();
+
+            services.AddAuthorization();
+            services.AddAuthentication();
+
+            services.ConfigureJWT(Configuration);
+            services.AddCors();
 
             services.AddControllers();
             services.AddRepository();
+
+            services.AddScoped<IAuthManager, AuthManager>();
+
+            services.AddTransient<IProfileRegistrationService, ProfileRegistrationService>();
+
 
             services.AddAutoMapper(typeof(MapperInitializer));
             

@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    public class User: EntityBase
+    public abstract class User: EntityBase
     {
+        protected User(Guid idLink)
+        {
+            IdLink = idLink;
+        }
+
+        public Guid IdLink { get; set; }
         public string Name {  get; set; }
         public string SurName { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+
     }
 }

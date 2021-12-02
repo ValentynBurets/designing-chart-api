@@ -8,7 +8,7 @@ namespace Domain.Entity
 {
     public class Student: User
     {
-        public Student()
+        public Student(Guid idLink) : base(idLink)
         {
             Attempts = new HashSet<Attempt>();
         }

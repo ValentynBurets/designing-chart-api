@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace designing_chart_api.Controllers
 {
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
 

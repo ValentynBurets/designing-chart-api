@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace designing_chart_api.Controllers
 {
-    public class AttemptController : Controller
+    public class AttemptController : BaseController 
     {
         private readonly IAttemptService _attemptService;
 
@@ -51,7 +51,6 @@ namespace designing_chart_api.Controllers
                 return BadRequest(ex.ToString());
             }
         }
-
         //// GET: AttemptController/Edit/5
         //public ActionResult Edit(int id)
         //{

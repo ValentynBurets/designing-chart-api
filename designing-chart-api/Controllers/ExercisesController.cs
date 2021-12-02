@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace designing_chart_api.Controllers
 {
-    public class ExercisesController : Controller
+    public class ExercisesController : BaseController
     {
         private readonly IExerciseService _exerciseService;
                                           
