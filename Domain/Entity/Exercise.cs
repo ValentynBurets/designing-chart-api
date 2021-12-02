@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entity
 {
-    public class Exercise : EntityBase
+    public class Exercise : EntityBase, ICloneable
     {
         public Exercise()
         {
@@ -23,5 +23,10 @@ namespace Domain.Entity
         public string EtalonChart { get; set; }
         public virtual CategoryType CategoryType { get; set; }
         public virtual ICollection<Attempt> Attempts { get; set; }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

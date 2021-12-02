@@ -6,6 +6,7 @@ using Data.Repository;
 using designing_chart_api.Configurations;
 using Domain.Entity;
 using Domain.Entity.Constants;
+using Domain.Repository;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -132,7 +133,7 @@ namespace BusinessTests
             var new_attempt = mapper.Map<CreateAttemptViewModel>(attempts[1]);
 
             //var mock = new Mock<IExerciseUnitOfWork>();
-            var attemptServiceRepositoryStub = new Mock<AttemptRepository>();
+            var attemptServiceRepositoryStub = new Mock<IAttemptRepository>();
 
             attemptServiceRepositoryStub.Setup(obj => obj.GetByStudentId(students[0].Id))
                 .ReturnsAsync(studentAttempts);
@@ -140,10 +141,26 @@ namespace BusinessTests
             attemptServiceRepositoryStub.Setup(obj => obj.GetByExerciseId(exercises[0].Id))
                 .ReturnsAsync(attempts);
 
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.GetById(new_attempt.ExerciseId))
+                .ReturnsAsync(exercises[1]);
+
+            var studentRepositoryStub = new Mock<IStudentRepository>();
+
+            studentRepositoryStub.Setup(obj => obj.GetById(new_attempt.StudentId))
+                .ReturnsAsync(students[1]);
+
             //unit of work initialization
             var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
             exerciseUnitOfWorkStub.Setup(obj => obj.AttemptRepository)
                 .Returns(attemptServiceRepositoryStub.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.StudentRepository)
+                .Returns(studentRepositoryStub.Object);
 
             var attemptService = new AttemptService(mapper, exerciseUnitOfWorkStub.Object);
 

@@ -3,6 +3,7 @@ using Business.Contract.Model;
 using Business.Contract.Services;
 using Data.Contract.UnitOfWork;
 using Domain.Entity;
+using Domain.Entity.Constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -38,9 +39,15 @@ namespace Business.Services
                 existed_category = await _unitOfWork.CategoryRepository.GetByCategoryName(new_exercise.Category);
             }
 
+            if(new_exercise.EtalonChart == null)
+            {
+                throw new ValidationException("Etalon Chart is null");
+            }
+
             var exercise = _mapper.Map<CreateExerciseViewModel, Exercise>(new_exercise);
 
             exercise.CategoryId = existed_category.Id;
+            exercise.StatusType = StatusType.Active;
 
             await _unitOfWork.ExerciseRepository.Add(exercise);
 

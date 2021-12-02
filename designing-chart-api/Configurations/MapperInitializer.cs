@@ -16,6 +16,8 @@ namespace designing_chart_api.Configurations
             CreateMap<Exercise, GetExerciseViewModel>().ReverseMap();
             CreateMap<Exercise, CreateExerciseViewModel>().ReverseMap();
             CreateMap<Attempt, CreateAttemptViewModel>().ReverseMap();
+            CreateMap<Attempt, GetAttemptViewModel>().ReverseMap();
+            //add exercise view model
         }
 
     }
