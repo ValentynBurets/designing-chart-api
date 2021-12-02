@@ -24,6 +24,19 @@ namespace designing_chart_api.Controllers
         //    return View();
         //}
 
+        public async Task<IActionResult> Index(string sortOrder)
+        {
+            try
+            {
+                var exercises = await _exerciseService.GetSorted(sortOrder);
+                return Ok(exercises);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
         //// GET: ExercisesController/Details/5
         //public ActionResult Details(int id)
         //{

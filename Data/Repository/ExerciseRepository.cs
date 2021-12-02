@@ -23,6 +23,26 @@ namespace Data.Repository
             return await _DbContext.Exercises.Where(e => e.CategoryType.Name == category).ToListAsync();
         }
 
+        public async Task<IEnumerable<Exercise>> GetByDate(string sortOrder)
+        {
+            return await _DbContext.Exercises.OrderBy(e => e.ExpirationDate).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Exercise>> GetByDateDesc(string sortOrder)
+        {
+            return await _DbContext.Exercises.OrderByDescending(e => e.ExpirationDate).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Exercise>> GetByName(string sortOrder)
+        {
+            return await _DbContext.Exercises.OrderBy(e => e.Title).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Exercise>> GetByNameDesc(string sortOrder)
+        {
+            return await _DbContext.Exercises.OrderByDescending(e => e.Title).ToListAsync();
+        }
+
         public async Task<IEnumerable<Exercise>> GetByStatus(StatusType status)
         {
             return await _DbContext.Exercises.Where(e => e.StatusType == status).ToListAsync();

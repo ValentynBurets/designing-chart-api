@@ -98,5 +98,36 @@ namespace Business.Services
             
             return exerciseViewModels;
         }
+
+        public async Task<IEnumerable<GetExerciseViewModel>> GetSorted(string sortOrder)
+        {
+            List<Exercise> exercises = new List<Exercise>();
+
+            switch (sortOrder)
+            {
+                case "name":
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByName();
+                    break;
+                case "name_desc":
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByNameDesc();
+                    break;
+                case "date":
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByDate();
+                    break;
+                case "date_desc":
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByDateDesc();
+                    break;
+                default:
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByName();
+                    break;
+            }
+
+            if (exercises == null)
+                throw new ValidationException($"Can't find exercises. Operation canceled");
+
+            var exerciseViewModels = _mapper.Map<IEnumerable<Exercise>, IEnumerable<GetExerciseViewModel>>(exercises);
+
+            return exerciseViewModels;
+        }
     }
 }
