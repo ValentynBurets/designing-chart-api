@@ -40,6 +40,7 @@ namespace designing_chart_api.Controllers
 
         // POST: AttemptController/Create
         [HttpPost]
+        [Route("[action]")]
         public async Task<ActionResult> Create(CreateAttemptViewModel attempt)
         {
             try

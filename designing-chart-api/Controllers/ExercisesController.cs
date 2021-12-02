@@ -53,6 +53,7 @@ namespace designing_chart_api.Controllers
 
         // GET: ExercisesController/GetAll
         [HttpGet]
+        [Route("[action]")]
         public async Task<ActionResult> GetAll()
         {
             try
@@ -68,6 +69,7 @@ namespace designing_chart_api.Controllers
 
         // POST: ExercisesController/Create
         [HttpPost]
+        [Route("[action]")]
         public async Task<ActionResult> Create(CreateExerciseViewModel newExercise)
         {
             try
@@ -83,6 +85,7 @@ namespace designing_chart_api.Controllers
 
         // POST: ExercisesController/Edit/5
         [HttpPut]
+        [Route("[action]")]
         public async Task<ActionResult> Edit(Guid id, CreateExerciseViewModel exercise)
         {
             try
@@ -98,6 +101,7 @@ namespace designing_chart_api.Controllers
 
         // GET: ExercisesController/Delete/5
         [HttpDelete]
+        [Route("[action]/{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
             try

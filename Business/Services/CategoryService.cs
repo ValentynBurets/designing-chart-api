@@ -20,6 +20,27 @@ namespace Business.Services
             _mapper = mapper;
         }
 
+        public async Task Create(string name)
+        {
+            var existed_category = await _unitOfWork.CategoryRepository.GetByCategoryName(name);
+
+            if(existed_category != null)
+            {
+                throw new Exception("This category is exist");
+            }
+            else
+            {
+                var new_category = new CategoryType()
+                {
+                    Name = name
+                };
+
+                await _unitOfWork.CategoryRepository.Add(new_category);
+            }
+
+            await _unitOfWork.Save();
+        }
+
         public async Task<IEnumerable<GetCategoryViewModel>> GetAll()
         {
             var categories = await _unitOfWork.CategoryRepository.GetAll();
