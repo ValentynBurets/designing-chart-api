@@ -460,6 +460,31 @@ namespace BusinessTests
             Assert.Equal(exercises[0].Title, resultList[0].Title);
         }
 
+        [Fact]
+        public void DeleteExerciseTest()
+        {
+            // Arrange
+
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.GetById(exercises[0].Id))
+                .ReturnsAsync(exercises[0]);
+
+            //unit of work initialization
+            var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            var exerciseService = new ExerciseService(exerciseUnitOfWorkStub.Object, mapper);
+
+            // Act
+            var result = exerciseService.Delete(exercises[0].Id);
+
+            //Assert
+
+            Assert.NotNull(result);
+        }
+
         //exercise controller tests
         [Fact]
         public void ExericiseControllerGetAllTest()
