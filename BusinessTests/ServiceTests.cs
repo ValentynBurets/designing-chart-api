@@ -76,7 +76,7 @@ namespace BusinessTests
                   Title = "second exercise title",
                   Description = "second description for exercise",
                   MaxMark = 200,
-                  ExpirationDate = new DateTime(2042, 5, 11),
+                  ExpirationDate = new DateTime(2042, 10, 11),
                   StatusType = StatusType.Expired,
                   CategoryId = categories[1].Id,
                   CategoryType = categories[1],
@@ -90,7 +90,7 @@ namespace BusinessTests
             {
                 Id = new Guid("bf89be71-3540-48df-b991-fc8066eb97a0"),
                 StartTime = new DateTime(2033, 5, 21, 8, 30, 52),
-                FinishTime = new DateTime(2033, 6, 30, 9, 30, 00),
+                FinishTime = new DateTime(2033, 5, 21, 9, 30, 00),
                 Mark = 32,
                 ExerciseId =  exercises[0].Id,
                 Exercise =  exercises[0],
@@ -174,15 +174,15 @@ namespace BusinessTests
         }
 
         [Fact]
-        public void CreateAttemptWithoutStudentId()
+        public void CreateAttemptWithoutStudentIdTest()
         {
             // Arrange
-            var new_attempt = mapper.Map<CreateAttemptViewModel>(attempts[1]);
+            var new_attempt = mapper.Map<CreateAttemptViewModel>(attempts[0]);
             new_attempt.StudentId = Guid.Empty;
 
             var attemptServiceRepositoryStub = new Mock<IAttemptRepository>();
 
-            attemptServiceRepositoryStub.Setup(obj => obj.GetByStudentId(students[1].Id))
+            attemptServiceRepositoryStub.Setup(obj => obj.GetByStudentId(students[0].Id))
                 .ReturnsAsync(studentAttempts);
 
             attemptServiceRepositoryStub.Setup(obj => obj.GetByExerciseId(exercises[1].Id))
@@ -193,10 +193,13 @@ namespace BusinessTests
             exerciseRepositoryStub.Setup(obj => obj.GetById(new_attempt.ExerciseId))
                 .ReturnsAsync(exercises[1]);
 
+            exerciseRepositoryStub.Setup(obj => obj.GetExpirationDateByExerciseId(new_attempt.ExerciseId))
+                .ReturnsAsync(exercises[1].ExpirationDate);
+
             var studentRepositoryStub = new Mock<IStudentRepository>();
 
-            studentRepositoryStub.Setup(obj => obj.GetById(new_attempt.StudentId))
-                .ReturnsAsync((Exercise)null);
+            studentRepositoryStub.Setup(obj => obj.Contains(new_attempt.StudentId))
+                .ReturnsAsync(true);
 
             //unit of work initialization
             var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
@@ -216,6 +219,8 @@ namespace BusinessTests
 
             //Assert
             Assert.NotNull(result);
+            var expected = "Student with this Id don`t exists";
+            Assert.Equal(expected, result.Exception.InnerException.Message);
         }
 
         [Fact]
@@ -457,7 +462,7 @@ namespace BusinessTests
 
         //exercise controller tests
         [Fact]
-        public void IndexReturnsAViewResultWithAListOfUsers()
+        public void ExericiseControllerGetAllTest()
         {
             // Arrange
                 //initialization

@@ -37,10 +37,9 @@ namespace Business.Services
                 throw new ValidationException($"Exercise with Id{new_attempt.ExerciseId} don`t exists");
             }
 
-            var existed_student = await _unitOfWork.StudentRepository.GetById(new_attempt.StudentId);
-            if (existed_student == null)
+            if (await _unitOfWork.StudentRepository.Contains(new_attempt.StudentId))
             {
-                throw new ValidationException($"Student with Id{new_attempt.StudentId} don`t exists");
+                throw new ValidationException("Student with this Id don`t exists");
             }
 
             var attempt = _mapper.Map<CreateAttemptViewModel, Attempt>(new_attempt);
@@ -49,7 +48,7 @@ namespace Business.Services
             
             if(DateTime.Compare(expiration_date, new_attempt.StartTime) < 0)
             {
-                throw new ValidationException($"The student started this exercise too late. solving started later than expiration time allowed.");
+                throw new ValidationException("The student started this exercise too late. solving started later than expiration time allowed.");
             }
 
             await _unitOfWork.AttemptRepository.Add(attempt);
@@ -62,7 +61,7 @@ namespace Business.Services
             var attempt = await _unitOfWork.AttemptRepository.GetById(Id);
 
             if (attempt == null)
-                throw new ValidationException($"Can't find attempt. Operation canceled");
+                throw new ValidationException("Can't find attempt. Operation canceled");
 
             
             //DeserializeObject

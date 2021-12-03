@@ -2,6 +2,7 @@
 using Data.Repository.Base;
 using Domain.Entity;
 using Domain.Repository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,16 @@ namespace Data.Repository
     {
         public StudentRepository(DomainDbContext exerciseDbContext) : base(exerciseDbContext)
         {
+        }
+
+        public async Task<bool> Contains(Guid id)
+        {
+            return (await _DbContext.Studens.FirstAsync(e => e.Id == id) == null) ? false : true;
+        }
+
+        public async Task<bool> Contains(Student student)
+        {
+            return await _DbContext.Studens.ContainsAsync(student);
         }
     }
 }
