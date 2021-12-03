@@ -26,12 +26,33 @@ namespace Business.Services
 
         public async Task Create(CreateExerciseViewModel new_exercise)
         {
-            if (await _unitOfWork.ExerciseRepository.GetByTitle(new_exercise.Title) != null)
+            if(new_exercise == null)
+            {
+                throw new ValidationException("Data don't exists");
+            }
+            if (new_exercise.EtalonChart == null)
+            {
+                throw new ValidationException("Etalon chart don't exists");
+            }
+
+            var exercise = _mapper.Map<CreateExerciseViewModel, Exercise>(new_exercise);
+
+            if (await _unitOfWork.ExerciseRepository.Contains(exercise))
+            {
+                throw new ValidationException("Exercise with this data exists");
+            }
+
+            if (await _unitOfWork.ExerciseRepository.Contains(new_exercise.Title))
             {
                 throw new ValidationException("Exercise with this title exists");
             }
 
             var existed_category = await _unitOfWork.CategoryRepository.GetByCategoryName(new_exercise.Category);
+            
+            if(new_exercise.Category == null)
+            {
+                throw new ValidationException("Category is null");
+            }
 
             if (existed_category == null)
             {
@@ -43,8 +64,6 @@ namespace Business.Services
             {
                 throw new ValidationException("Etalon Chart is null");
             }
-
-            var exercise = _mapper.Map<CreateExerciseViewModel, Exercise>(new_exercise);
 
             exercise.CategoryId = existed_category.Id;
             exercise.StatusType = StatusType.Active;

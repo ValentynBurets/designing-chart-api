@@ -13,12 +13,18 @@ namespace designing_chart_api.Configurations
         public MapperInitializer()
         {
             CreateMap<CategoryType, GetCategoryViewModel>().ReverseMap();
-            CreateMap<Exercise, GetExerciseViewModel>().ReverseMap();
+            CreateMap<Exercise, GetExerciseViewModel>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.Status = src.StatusType.ToString();
+                });
             CreateMap<Exercise, CreateExerciseViewModel>().ReverseMap();
             CreateMap<Attempt, CreateAttemptViewModel>().ReverseMap();
-            CreateMap<Attempt, GetAttemptViewModel>().ReverseMap();
-            //add exercise view model
+            CreateMap<Attempt, GetAttemptViewModel>()
+                .AfterMap((src, dest, context) =>
+                {
+                    dest.ExerciseInfo = context.Mapper.Map<Exercise, GetExerciseViewModel>(src.Exercise);
+                });
         }
-
     }
 }

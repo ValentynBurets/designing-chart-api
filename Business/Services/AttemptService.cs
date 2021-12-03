@@ -18,7 +18,7 @@ namespace Business.Services
         private IMapper _mapper;
         private readonly IExerciseUnitOfWork _unitOfWork;
 
-        public AttemptService(IMapper mapper, IExerciseUnitOfWork unitOfWork)
+        public AttemptService(IExerciseUnitOfWork unitOfWork, IMapper mapper)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -44,6 +44,13 @@ namespace Business.Services
             }
 
             var attempt = _mapper.Map<CreateAttemptViewModel, Attempt>(new_attempt);
+
+            var expiration_date = await _unitOfWork.ExerciseRepository.GetExpirationDateByExerciseId(attempt.ExerciseId);
+            
+            if(DateTime.Compare(expiration_date, new_attempt.StartTime) < 0)
+            {
+                throw new ValidationException($"The student started this exercise too late. solving started later than expiration time allowed.");
+            }
 
             await _unitOfWork.AttemptRepository.Add(attempt);
 

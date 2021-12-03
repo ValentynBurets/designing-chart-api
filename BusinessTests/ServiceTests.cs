@@ -4,12 +4,16 @@ using Business.Services;
 using Data.Contract.UnitOfWork;
 using Data.Repository;
 using designing_chart_api.Configurations;
+using designing_chart_api.Controllers;
 using Domain.Entity;
 using Domain.Entity.Constants;
 using Domain.Repository;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace BusinessTests
@@ -60,7 +64,7 @@ namespace BusinessTests
                   Title = "exercise title",
                   Description = "description for exercise",
                   MaxMark = 100,
-                  ExpirationDate = new DateTime(2033, 10, 6),
+                  ExpirationDate = new DateTime(2000, 10, 6),
                   StatusType = StatusType.Active,
                   CategoryId = categories[0].Id,
                   CategoryType = categories[0],
@@ -72,7 +76,7 @@ namespace BusinessTests
                   Title = "second exercise title",
                   Description = "second description for exercise",
                   MaxMark = 200,
-                  ExpirationDate = new DateTime(2042, 5, 1),
+                  ExpirationDate = new DateTime(2042, 5, 11),
                   StatusType = StatusType.Expired,
                   CategoryId = categories[1].Id,
                   CategoryType = categories[1],
@@ -98,7 +102,7 @@ namespace BusinessTests
             {
                 Id = new Guid("9fa01d5e-b130-4dee-aaec-d39554e9a686"),
                 StartTime = new DateTime(2033, 5, 11, 9, 25, 35),
-                FinishTime = new DateTime(2033, 5, 20, 10, 30, 52),
+                FinishTime = new DateTime(2033, 5, 11, 10, 30, 52),
                 Mark = 45,
                 ExerciseId =  exercises[1].Id,
                 Exercise =  exercises[1],
@@ -126,19 +130,17 @@ namespace BusinessTests
 
 
         [Fact]
-        public async void CreateAttempt()
+        public void CreateAttempt()
         {
-            var test = attempts;
             // Arrange
             var new_attempt = mapper.Map<CreateAttemptViewModel>(attempts[1]);
 
-            //var mock = new Mock<IExerciseUnitOfWork>();
             var attemptServiceRepositoryStub = new Mock<IAttemptRepository>();
 
-            attemptServiceRepositoryStub.Setup(obj => obj.GetByStudentId(students[0].Id))
+            attemptServiceRepositoryStub.Setup(obj => obj.GetByStudentId(students[1].Id))
                 .ReturnsAsync(studentAttempts);
 
-            attemptServiceRepositoryStub.Setup(obj => obj.GetByExerciseId(exercises[0].Id))
+            attemptServiceRepositoryStub.Setup(obj => obj.GetByExerciseId(exercises[1].Id))
                 .ReturnsAsync(attempts);
 
             var exerciseRepositoryStub = new Mock<IExerciseRepository>();
@@ -162,13 +164,342 @@ namespace BusinessTests
             exerciseUnitOfWorkStub.Setup(obj => obj.StudentRepository)
                 .Returns(studentRepositoryStub.Object);
 
-            var attemptService = new AttemptService(mapper, exerciseUnitOfWorkStub.Object);
+            var attemptService = new AttemptService(exerciseUnitOfWorkStub.Object, mapper);
 
             // Act
             var result = attemptService.Create(new_attempt);
 
             //Assert
             Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void CreateAttemptWithoutStudentId()
+        {
+            // Arrange
+            var new_attempt = mapper.Map<CreateAttemptViewModel>(attempts[1]);
+            new_attempt.StudentId = Guid.Empty;
+
+            var attemptServiceRepositoryStub = new Mock<IAttemptRepository>();
+
+            attemptServiceRepositoryStub.Setup(obj => obj.GetByStudentId(students[1].Id))
+                .ReturnsAsync(studentAttempts);
+
+            attemptServiceRepositoryStub.Setup(obj => obj.GetByExerciseId(exercises[1].Id))
+                .ReturnsAsync(attempts);
+
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.GetById(new_attempt.ExerciseId))
+                .ReturnsAsync(exercises[1]);
+
+            var studentRepositoryStub = new Mock<IStudentRepository>();
+
+            studentRepositoryStub.Setup(obj => obj.GetById(new_attempt.StudentId))
+                .ReturnsAsync((Exercise)null);
+
+            //unit of work initialization
+            var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+            exerciseUnitOfWorkStub.Setup(obj => obj.AttemptRepository)
+                .Returns(attemptServiceRepositoryStub.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.StudentRepository)
+                .Returns(studentRepositoryStub.Object);
+
+            var attemptService = new AttemptService(exerciseUnitOfWorkStub.Object, mapper);
+
+            // Act
+            var result = attemptService.Create(new_attempt);
+
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void CreateAttemptForExpiredExercise()
+        {
+            // Arrange
+            var new_attempt = mapper.Map<CreateAttemptViewModel>(attempts[0]);
+
+            var attemptServiceRepositoryStub = new Mock<IAttemptRepository>();
+
+            attemptServiceRepositoryStub.Setup(obj => obj.GetByStudentId(students[0].Id))
+                .ReturnsAsync(studentAttempts);
+
+            attemptServiceRepositoryStub.Setup(obj => obj.GetByExerciseId(exercises[0].Id))
+                .ReturnsAsync(attempts);
+
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.GetById(new_attempt.ExerciseId))
+                .ReturnsAsync(exercises[0]);
+
+            var studentRepositoryStub = new Mock<IStudentRepository>();
+
+            studentRepositoryStub.Setup(obj => obj.GetById(new_attempt.StudentId))
+                .ReturnsAsync(students[0]);
+
+            //unit of work initialization
+            var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+            exerciseUnitOfWorkStub.Setup(obj => obj.AttemptRepository)
+                .Returns(attemptServiceRepositoryStub.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.StudentRepository)
+                .Returns(studentRepositoryStub.Object);
+
+            var attemptService = new AttemptService(exerciseUnitOfWorkStub.Object, mapper);
+
+            // Act
+            var result = attemptService.Create(new_attempt);
+
+            //Assert
+            Assert.NotNull(result);
+            var expected = "One or more errors occurred. (The student started this exercise too late. solving started later than expiration time allowed.)";
+            Assert.Equal(expected, result.Exception.Message);
+        }
+
+        [Fact]
+        public void CreateExercise()
+        {
+            // Arrange
+
+            var exercise = exercises[1];
+            var new_exercise = mapper.Map<CreateExerciseViewModel>(exercise);
+            new_exercise.Category = exercise.CategoryType.Name;
+
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.Contains(exercise.Title))
+                .ReturnsAsync(false);
+            exerciseRepositoryStub.Setup(obj => obj.Contains(exercise))
+                .ReturnsAsync(false);
+
+            var categoryRepository = new Mock<ICategoryRepository>();
+            categoryRepository.Setup(obj => obj.GetByCategoryName(exercise.CategoryType.Name))
+                .ReturnsAsync(exercise.CategoryType);
+
+            //unit of work initialization
+            var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+            exerciseUnitOfWorkStub.Setup(obj => obj.CategoryRepository)
+                .Returns(categoryRepository.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            var exerciseService = new ExerciseService(exerciseUnitOfWorkStub.Object, mapper);
+
+            // Act
+            var result = exerciseService.Create(new_exercise);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.True(result.Exception == null);
+        }
+
+        [Fact]
+        public void CreateExerciseWithExistedTitle()
+        {
+            // Arrange
+
+            var exercise = exercises[1];
+            var new_exercise = mapper.Map<CreateExerciseViewModel>(exercise);
+            new_exercise.Category = exercise.CategoryType.Name;
+
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.Contains(exercise.Title))
+                .ReturnsAsync(true);
+            exerciseRepositoryStub.Setup(obj => obj.Contains(exercise))
+                .ReturnsAsync(false);
+
+            var categoryRepository = new Mock<ICategoryRepository>();
+            categoryRepository.Setup(obj => obj.GetByCategoryName(exercise.CategoryType.Name))
+                .ReturnsAsync(exercise.CategoryType);
+
+            //unit of work initialization
+            var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+            exerciseUnitOfWorkStub.Setup(obj => obj.CategoryRepository)
+                .Returns(categoryRepository.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            var exerciseService = new ExerciseService(exerciseUnitOfWorkStub.Object, mapper);
+
+            // Act
+            var result = exerciseService.Create(new_exercise);
+
+            //Assert
+            Assert.NotNull(result);
+            var expected = "One or more errors occurred. (Exercise with this title exists)";
+            Assert.Equal(expected, result.Exception.Message);
+        }
+
+        [Fact]
+        public void CreateExerciseWithoutEtalonChart()
+        {
+            // Arrange
+            var exercise = exercises[1];
+            var new_exercise = mapper.Map<CreateExerciseViewModel>(exercise);
+
+            //in new exercise set etalon Chart to null
+            new_exercise.EtalonChart = null;
+
+            new_exercise.Category = exercise.CategoryType.Name;
+
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.Contains(exercise.Title))
+                .ReturnsAsync(false);
+            exerciseRepositoryStub.Setup(obj => obj.Contains(exercise))
+                .ReturnsAsync(false);
+
+            var categoryRepository = new Mock<ICategoryRepository>();
+            categoryRepository.Setup(obj => obj.GetByCategoryName(exercise.CategoryType.Name))
+                .ReturnsAsync(exercise.CategoryType);
+
+            //unit of work initialization
+            var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+            exerciseUnitOfWorkStub.Setup(obj => obj.CategoryRepository)
+                .Returns(categoryRepository.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            var exerciseService = new ExerciseService(exerciseUnitOfWorkStub.Object, mapper);
+
+            // Act
+            var result = exerciseService.Create(new_exercise);
+
+            //Assert
+            Assert.NotNull(result);
+            var expected = "One or more errors occurred. (Etalon chart don't exists)";
+            Assert.Equal(expected, result.Exception.Message);
+        }
+
+        [Fact]
+        public void CreateExerciseWithoutCategory()
+        {
+            // Arrange
+
+            var exercise = exercises[1];
+            var new_exercise = mapper.Map<CreateExerciseViewModel>(exercise);
+
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.Contains(exercise.Title))
+                .ReturnsAsync(false);
+            exerciseRepositoryStub.Setup(obj => obj.Contains(exercise))
+                .ReturnsAsync(false);
+
+            var categoryRepository = new Mock<ICategoryRepository>();
+            categoryRepository.Setup(obj => obj.GetByCategoryName(exercise.CategoryType.Name))
+                .ReturnsAsync(exercise.CategoryType);
+
+            //unit of work initialization
+            var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+            exerciseUnitOfWorkStub.Setup(obj => obj.CategoryRepository)
+                .Returns(categoryRepository.Object);
+
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            var exerciseService = new ExerciseService(exerciseUnitOfWorkStub.Object, mapper);
+
+            // Act
+            var result = exerciseService.Create(new_exercise);
+
+            //Assert
+            Assert.NotNull(result);
+            var expected = "One or more errors occurred. (Category is null)";
+            Assert.Equal(expected, result.Exception.Message);
+        }
+
+        [Fact]
+        public void GetAllExercises()
+        {
+            // Arrange
+
+            var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+            exerciseRepositoryStub.Setup(obj => obj.GetAll())
+                .ReturnsAsync(exercises);
+
+            //unit of work initialization
+            var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+            exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                .Returns(exerciseRepositoryStub.Object);
+
+            var exerciseService = new ExerciseService(exerciseUnitOfWorkStub.Object, mapper);
+
+            // Act
+            var result = exerciseService.GetAll().Result;
+
+            //Assert
+
+            var resultList = result.ToList();
+
+            Assert.NotNull(result);
+            Assert.Equal(exercises.Count(), result.Count());
+
+            Assert.Equal(exercises[0].Description, resultList[0].Description);
+
+            Assert.Equal(exercises[0].ExpirationDate, resultList[0].ExpirationDate);
+
+            Assert.Equal(exercises[0].Title, resultList[0].Title);
+        }
+
+        //exercise controller tests
+        [Fact]
+        public void IndexReturnsAViewResultWithAListOfUsers()
+        {
+            // Arrange
+                //initialization
+                
+                var exerciseRepositoryStub = new Mock<IExerciseRepository>();
+
+                exerciseRepositoryStub.Setup(obj => obj.GetAll())
+                    .ReturnsAsync(exercises);
+
+                //unit of work initialization
+                var exerciseUnitOfWorkStub = new Mock<IExerciseUnitOfWork>();
+                exerciseUnitOfWorkStub.Setup(obj => obj.ExerciseRepository)
+                    .Returns(exerciseRepositoryStub.Object);
+
+                var exerciseService = new ExerciseService(exerciseUnitOfWorkStub.Object, mapper);
+
+                //end of initialization
+
+                var controller = new ExercisesController(exerciseService);
+
+                 // Act
+                var result = controller.GetAll();
+
+            // Assert
+
+            var viewResult = Assert.IsType<Microsoft.AspNetCore.Mvc.OkObjectResult>(result.Result);
+            var test_model = viewResult.Value;
+
+            var model = Assert.IsAssignableFrom<IEnumerable<GetExerciseViewModel>>(
+                viewResult.Value);
+
+           
+            var resultList = model.ToList();
+
+            Assert.NotNull(model);
+            Assert.Equal(exercises.Count(), model.Count());
+
+            Assert.Equal(exercises[0].Description, resultList[0].Description);
+
+            Assert.Equal(exercises[0].ExpirationDate, resultList[0].ExpirationDate);
+
+            Assert.Equal(exercises[0].Title, resultList[0].Title);
         }
     }
 }

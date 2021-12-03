@@ -17,6 +17,8 @@ namespace Domain.Repository
         Task<IEnumerable<Exercise>> GetByNameDesc();
         Task<IEnumerable<Exercise>> GetByDate();
         Task<IEnumerable<Exercise>> GetByDateDesc();
-
+        Task<DateTime> GetExpirationDateByExerciseId(Guid id);
+        Task<bool> Contains(string title);
+        Task<bool> Contains(Exercise exercise);
     }
 }

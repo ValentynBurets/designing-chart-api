@@ -12,7 +12,7 @@ namespace Business.Contract.Model
         public DateTime FinishTime { get; set; }
         public double Mark { get; set; }
         public double PerCent { get; set; }
-        public virtual GetExerciseViewModel Exercise { get; set; }
+        public virtual GetExerciseViewModel ExerciseInfo { get; set; }
         public string Chart { get; set; }
     }
 }

@@ -18,6 +18,16 @@ namespace Data.Repository
         {
         }
 
+        public async Task<bool> Contains(string title)
+        {
+            return (await _DbContext.Exercises.FirstAsync(e => e.Title == title) == null) ? false : true;
+        }
+
+        public async Task<bool> Contains(Exercise exercise)
+        {
+            return await _DbContext.Exercises.ContainsAsync(exercise);
+        }
+
         public async Task<IEnumerable<Exercise>> GetByCategory(string category)
         {
             return await _DbContext.Exercises.Where(e => e.CategoryType.Name == category).ToListAsync();
@@ -50,7 +60,12 @@ namespace Data.Repository
 
         public async Task<Exercise> GetByTitle(string title)
         {
-            return await _DbContext.Exercises.FirstOrDefaultAsync(e => e.Title == title);
+            return await _DbContext.Exercises.FirstAsync(e => e.Title == title);
+        }
+
+        public async Task<DateTime> GetExpirationDateByExerciseId(Guid id)
+        {
+            return (await _DbContext.Exercises.FirstAsync(e => e.Id == id)).ExpirationDate;
         }
     }
 }
