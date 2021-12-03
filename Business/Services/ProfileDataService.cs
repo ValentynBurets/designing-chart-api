@@ -26,7 +26,9 @@ namespace Business.Services
 
         public async Task<ProfileInfoModel> GetStudentProfileInfoById(Guid id)
         {
-            var student = await _unitOfWork.StudentRepository.GetById(id);
+            //var student = await _unitOfWork.StudentRepository.GetById(id);
+            var student = await _unitOfWork.StudentRepository.FirstOrDefault(x=>x.IdLink == id);
+
 
             if (student == null)
             {
@@ -40,7 +42,7 @@ namespace Business.Services
 
         public async Task<ProfileInfoModel> GetAdminProfileInfoById(Guid id)
         {
-            var admin = await _unitOfWork.AdminRepository.GetById(id);
+            var admin = await _unitOfWork.AdminRepository.FirstOrDefault(x=>x.IdLink == id);
 
             if (admin == null)
             {
@@ -84,6 +86,8 @@ namespace Business.Services
             await _unitOfWork.Save();
         }
 
+       
+        
         public async Task<IEnumerable<UserInfoViewModel>> GetAllUsersInfo()
         {
             List<UserInfoViewModel> userList = new List<UserInfoViewModel>();

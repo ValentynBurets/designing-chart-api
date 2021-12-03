@@ -31,6 +31,12 @@ namespace Data.Repository.Base
             return await _DbContext.Set<TEntity>().Where(expression).ToListAsync();
         }
 
+        public async Task<TEntity> FirstOrDefault(Expression<Func<TEntity, bool>> expression)
+        {
+            return await _DbContext.Set<TEntity>().FirstOrDefaultAsync(expression);
+
+        }
+
         public async Task<IEnumerable<TEntity>> GetAll()
         {
             return await _DbContext.Set<TEntity>().ToListAsync();

@@ -45,13 +45,14 @@ namespace Api
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
 
+
             services.ConfigureIdentity();
 
             services.AddAuthorization();
             services.AddAuthentication();
 
             services.ConfigureJWT(Configuration);
-            services.AddCors();
+           
 
             services.AddControllers();
             services.AddRepository();
@@ -82,6 +83,12 @@ namespace Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
 
             app.UseAuthentication();
             app.UseAuthorization();
