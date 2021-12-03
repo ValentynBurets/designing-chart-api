@@ -84,6 +84,18 @@ namespace Business.Services
             await _unitOfWork.Save();
         }
 
+        public async Task<GetExerciseViewModel> GetById(Guid Id)
+        {
+            var exercise = await _unitOfWork.ExerciseRepository.GetById(Id);
+
+            if (exercise == null)
+                throw new ValidationException($"Can't find exercise with Id ({Id}). Operation canceled");
+
+            var exerciseViewModel = _mapper.Map<GetExerciseViewModel>(exercise);
+
+            return exerciseViewModel;
+        }
+
         public async Task<Exercise> Edit(Guid Id, CreateExerciseViewModel exercise)
         {
             var existed_exercise = await _unitOfWork.ExerciseRepository.GetById(Id);

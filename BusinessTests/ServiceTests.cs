@@ -481,8 +481,9 @@ namespace BusinessTests
             var result = exerciseService.Delete(exercises[0].Id);
 
             //Assert
-
+            //Mock.Assert(() => exerciseRepositoryStub.Submit(), Occurs.Never());
             Assert.NotNull(result);
+
         }
 
         //exercise controller tests

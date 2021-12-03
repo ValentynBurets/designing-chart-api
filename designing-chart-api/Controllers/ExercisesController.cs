@@ -68,6 +68,22 @@ namespace designing_chart_api.Controllers
             }
         }
 
+        // GET: ExercisesController/GetAll
+        [HttpGet]
+        [Route("[action]/{id}")]
+        public async Task<ActionResult> GetByid(Guid Id)
+        {
+            try
+            {
+                var exercise = await _exerciseService.GetById(Id);
+                return Ok(exercise);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
         // POST: ExercisesController/Create
         [HttpPost]
         [Route("[action]")]
