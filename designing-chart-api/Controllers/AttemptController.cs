@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace designing_chart_api.Controllers
 {
+
+    [Route("api/[controller]")]
     public class AttemptController : BaseController 
     {
         private readonly IAttemptService _attemptService;
@@ -39,6 +41,7 @@ namespace designing_chart_api.Controllers
         // POST: AttemptController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<ActionResult> Create(CreateAttemptViewModel attempt)
         {
             try

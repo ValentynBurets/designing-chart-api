@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace designing_chart_api.Controllers
 {
+    [Route("api/[controller]")]
     public class ExercisesController : BaseController
     {
         private readonly IExerciseService _exerciseService;
@@ -37,6 +38,8 @@ namespace designing_chart_api.Controllers
         //}
 
         // GET: ExercisesController/GetAll
+        [HttpGet]
+        [Route("[action]")]
         public async Task<ActionResult> GetAll()
         {
             try
@@ -53,6 +56,7 @@ namespace designing_chart_api.Controllers
         // POST: ExercisesController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<ActionResult> Create(CreateExerciseViewModel newExercise)
         {
             try
@@ -69,6 +73,7 @@ namespace designing_chart_api.Controllers
         // POST: ExercisesController/Edit/5
         [HttpPut]
         [ValidateAntiForgeryToken]
+        [Route("[action]")]
         public async Task<ActionResult> Edit(Guid id, CreateExerciseViewModel exercise)
         {
             try
@@ -83,6 +88,8 @@ namespace designing_chart_api.Controllers
         }
 
         // GET: ExercisesController/Delete/5
+        [HttpGet]
+        [Route("[action]")]
         public async Task<ActionResult> Delete(Guid id)
         {
             try
