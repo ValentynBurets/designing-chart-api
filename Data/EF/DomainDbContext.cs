@@ -1,5 +1,8 @@
 ﻿using Domain.Entity;
+using Domain.Entity.Constants;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace Data.EF
 {
@@ -64,6 +67,9 @@ namespace Data.EF
             modelBuilder.Entity<Admin>()
                 .HasIndex(i => i.Id)
                 .IsUnique(true);
+            
+            //Seed
+            modelBuilder.SeedData();
         }
 
         public DbSet<Exercise> Exercises { get; set; }

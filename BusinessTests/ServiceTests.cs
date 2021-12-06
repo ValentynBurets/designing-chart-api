@@ -38,21 +38,17 @@ namespace BusinessTests
 
         static List<Student> students = new List<Student>
         {
-            new Student
+            new Student(new Guid())
             {
                 Id = new Guid("dc578c85-56ac-47d4-a808-64b3ece9f0d2"),
                 Name = "Ivan",
-                SurName = "Ivanov",
-                Password = "password",
-                Email = "Ivan.Ivanov@gmail.com"
+                SurName = "Ivanov"
             },
-            new Student
+            new Student(new Guid())
             {
                 Id = new Guid("dd3311b1-93a9-4146-a828-e1d7837f6528"),
                 Name = "Petro",
-                SurName = "Petrov",
-                Password = "password2",
-                Email = "Petro.Petrov@gmail.com"
+                SurName = "Petrov"
             }
         };
 
@@ -164,7 +160,7 @@ namespace BusinessTests
             exerciseUnitOfWorkStub.Setup(obj => obj.StudentRepository)
                 .Returns(studentRepositoryStub.Object);
 
-            var attemptService = new AttemptService(exerciseUnitOfWorkStub.Object, mapper);
+            var attemptService = new AttemptService(mapper,exerciseUnitOfWorkStub.Object);
 
             // Act
             var result = attemptService.Create(new_attempt);
@@ -212,7 +208,7 @@ namespace BusinessTests
             exerciseUnitOfWorkStub.Setup(obj => obj.StudentRepository)
                 .Returns(studentRepositoryStub.Object);
 
-            var attemptService = new AttemptService(exerciseUnitOfWorkStub.Object, mapper);
+            var attemptService = new AttemptService(unitOfWork: exerciseUnitOfWorkStub.Object, mapper:mapper);
 
             // Act
             var result = attemptService.Create(new_attempt);
@@ -258,7 +254,7 @@ namespace BusinessTests
             exerciseUnitOfWorkStub.Setup(obj => obj.StudentRepository)
                 .Returns(studentRepositoryStub.Object);
 
-            var attemptService = new AttemptService(exerciseUnitOfWorkStub.Object, mapper);
+            var attemptService = new AttemptService(mapper, exerciseUnitOfWorkStub.Object);
 
             // Act
             var result = attemptService.Create(new_attempt);

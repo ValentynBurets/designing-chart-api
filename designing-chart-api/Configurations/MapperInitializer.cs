@@ -18,7 +18,7 @@ namespace designing_chart_api.Configurations
             CreateMap<Exercise, GetExerciseViewModel>()
                 .AfterMap((src, dest) =>
                 {
-                    dest.Status = src.StatusType.ToString();
+                    dest.StatusType = src.StatusType.ToString();
                 });
             CreateMap<Exercise, CreateExerciseViewModel>().ReverseMap();
             CreateMap<Attempt, CreateAttemptViewModel>().ReverseMap();

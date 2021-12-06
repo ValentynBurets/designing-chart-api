@@ -3,10 +3,6 @@ using Business.Services;
 using Data.Contract.UnitOfWork;
 using Data.UnitOfWork;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UserIdentity.Data;
 
 namespace designing_chart_api.Configurations
@@ -22,6 +18,7 @@ namespace designing_chart_api.Configurations
             service.AddTransient<IAttemptService, AttemptService>();
             service.AddTransient<IExerciseService, ExerciseService>();
             service.AddTransient<ICategoryService, CategoryService>();
+            service.AddTransient<IStatisticService, StatisticService>();
             return service;
         }
     }
