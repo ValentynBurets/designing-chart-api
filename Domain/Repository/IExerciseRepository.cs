@@ -13,5 +13,12 @@ namespace Domain.Repository
         Task<Exercise> GetByTitle(string title);
         Task<IEnumerable<Exercise>> GetByStatus(StatusType status);
         Task<IEnumerable<Exercise>> GetByCategory(string category);
+        Task<IEnumerable<Exercise>> GetByName();
+        Task<IEnumerable<Exercise>> GetByNameDesc();
+        Task<IEnumerable<Exercise>> GetByDate();
+        Task<IEnumerable<Exercise>> GetByDateDesc();
+        Task<DateTime> GetExpirationDateByExerciseId(Guid id);
+        Task<bool> Contains(string title);
+        Task<bool> Contains(Exercise exercise);
     }
 }

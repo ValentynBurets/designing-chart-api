@@ -23,14 +23,17 @@ namespace Data.UnitOfWork
             _dbContext = exercisesDbContext;
         }
 
+        public IAttemptRepository AttemptRepository => 
+            _attemptRepository ??= new AttemptRepository(_dbContext);
 
-        public IAttemptRepository AttemptRepository => _attemptRepository ??= new AttemptRepository(_dbContext);
+        public ICategoryRepository CategoryRepository => 
+            _categoryRepository ??= new CategoryRepository(_dbContext);
 
-        public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_dbContext);
+        public IExerciseRepository ExerciseRepository => 
+            _exerciseRepository ??= new ExerciseRepository(_dbContext);
 
-        public IExerciseRepository ExerciseRepository => _exerciseRepository ??= new ExerciseRepository(_dbContext);
-
-        public IStudentRepository StudentRepository => _studentRepository ??= new StudentRepository(_dbContext);
+        public IStudentRepository StudentRepository => 
+            _studentRepository ??= new StudentRepository(_dbContext);
 
         public async Task<int> Save() => await _dbContext.SaveChangesAsync();
     }

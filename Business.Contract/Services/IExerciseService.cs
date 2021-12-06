@@ -13,6 +13,8 @@ namespace Business.Contract.Services
         public Task Create(CreateExerciseViewModel exercise);
         public Task<Exercise> Edit(Guid Id, CreateExerciseViewModel exercise);
         public Task<IEnumerable<GetExerciseViewModel>> GetAll();
+        public Task<GetExerciseViewModel> GetById(Guid Id);
+        public Task<IEnumerable<GetExerciseViewModel>> GetSorted(string sortOrder);
         public Task Delete(Guid Id);
     }
 }
