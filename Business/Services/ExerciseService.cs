@@ -3,6 +3,7 @@ using Business.Contract.Model;
 using Business.Contract.Services;
 using Data.Contract.UnitOfWork;
 using Domain.Entity;
+using Domain.Entity.Constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,12 +26,33 @@ namespace Business.Services
 
         public async Task Create(CreateExerciseViewModel new_exercise)
         {
-            if (await _unitOfWork.ExerciseRepository.GetByTitle(new_exercise.Title) != null)
+            if(new_exercise == null)
+            {
+                throw new ValidationException("Data don't exists");
+            }
+            if (new_exercise.EtalonChart == null)
+            {
+                throw new ValidationException("Etalon chart don't exists");
+            }
+
+            var exercise = _mapper.Map<CreateExerciseViewModel, Exercise>(new_exercise);
+
+            if (await _unitOfWork.ExerciseRepository.Contains(exercise))
+            {
+                throw new ValidationException("Exercise with this data exists");
+            }
+
+            if (await _unitOfWork.ExerciseRepository.Contains(new_exercise.Title))
             {
                 throw new ValidationException("Exercise with this title exists");
             }
 
             var existed_category = await _unitOfWork.CategoryRepository.GetByCategoryName(new_exercise.Category);
+            
+            if(new_exercise.Category == null)
+            {
+                throw new ValidationException("Category is null");
+            }
 
             if (existed_category == null)
             {
@@ -38,9 +60,13 @@ namespace Business.Services
                 existed_category = await _unitOfWork.CategoryRepository.GetByCategoryName(new_exercise.Category);
             }
 
-            var exercise = _mapper.Map<CreateExerciseViewModel, Exercise>(new_exercise);
+            if(new_exercise.EtalonChart == null)
+            {
+                throw new ValidationException("Etalon Chart is null");
+            }
 
             exercise.CategoryId = existed_category.Id;
+            exercise.StatusType = StatusType.Active;
 
             await _unitOfWork.ExerciseRepository.Add(exercise);
 
@@ -56,6 +82,18 @@ namespace Business.Services
 
             await _unitOfWork.ExerciseRepository.Remove(exercise);
             await _unitOfWork.Save();
+        }
+
+        public async Task<GetExerciseViewModel> GetById(Guid Id)
+        {
+            var exercise = await _unitOfWork.ExerciseRepository.GetById(Id);
+
+            if (exercise == null)
+                throw new ValidationException($"Can't find exercise with Id ({Id}). Operation canceled");
+
+            var exerciseViewModel = _mapper.Map<GetExerciseViewModel>(exercise);
+
+            return exerciseViewModel;
         }
 
         public async Task<Exercise> Edit(Guid Id, CreateExerciseViewModel exercise)
@@ -96,6 +134,37 @@ namespace Business.Services
 
             var exerciseViewModels = _mapper.Map<IEnumerable<Exercise>, IEnumerable<GetExerciseViewModel>>(exercises);
             
+            return exerciseViewModels;
+        }
+
+        public async Task<IEnumerable<GetExerciseViewModel>> GetSorted(string sortOrder)
+        {
+            List<Exercise> exercises = new List<Exercise>();
+
+            switch (sortOrder)
+            {
+                case "name":
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByName();
+                    break;
+                case "name_desc":
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByNameDesc();
+                    break;
+                case "date":
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByDate();
+                    break;
+                case "date_desc":
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByDateDesc();
+                    break;
+                default:
+                    exercises = (List<Exercise>)await _unitOfWork.ExerciseRepository.GetByName();
+                    break;
+            }
+
+            if (exercises == null)
+                throw new ValidationException($"Can't find exercises. Operation canceled");
+
+            var exerciseViewModels = _mapper.Map<IEnumerable<Exercise>, IEnumerable<GetExerciseViewModel>>(exercises);
+
             return exerciseViewModels;
         }
     }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace designing_chart_api.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class ExercisesController : BaseController
     {
         private readonly IExerciseService _exerciseService;
@@ -24,6 +25,20 @@ namespace designing_chart_api.Controllers
         //{
         //    return View();
         //}
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Index(string sortOrder)
+        {
+            try
+            {
+                var exercises = await _exerciseService.GetSorted(sortOrder);
+                return Ok(exercises);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
 
         //// GET: ExercisesController/Details/5
         //public ActionResult Details(int id)
@@ -47,7 +62,23 @@ namespace designing_chart_api.Controllers
                 var exercises = await _exerciseService.GetAll();
                 return Ok(exercises);
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        // GET: ExercisesController/GetAll
+        [HttpGet]
+        [Route("[action]/{id}")]
+        public async Task<ActionResult> GetByid(Guid Id)
+        {
+            try
+            {
+                var exercise = await _exerciseService.GetById(Id);
+                return Ok(exercise);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
             }
@@ -55,16 +86,15 @@ namespace designing_chart_api.Controllers
 
         // POST: ExercisesController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("[action]")]
         public async Task<ActionResult> Create(CreateExerciseViewModel newExercise)
         {
             try
-            {         
+            {
                 await _exerciseService.Create(newExercise);
                 return Ok("New exercise created!");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
             }
@@ -72,7 +102,6 @@ namespace designing_chart_api.Controllers
 
         // POST: ExercisesController/Edit/5
         [HttpPut]
-        [ValidateAntiForgeryToken]
         [Route("[action]")]
         public async Task<ActionResult> Edit(Guid id, CreateExerciseViewModel exercise)
         {
@@ -81,15 +110,15 @@ namespace designing_chart_api.Controllers
                 await _exerciseService.Edit(id, exercise);
                 return Accepted("Сhanges applied!");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
             }
         }
 
         // GET: ExercisesController/Delete/5
-        [HttpGet]
-        [Route("[action]")]
+        [HttpDelete]
+        [Route("[action]/{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
             try

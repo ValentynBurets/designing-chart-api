@@ -9,6 +9,7 @@ namespace Domain.Repository
 {
     public interface IStudentRepository : IEntityRepository<Student>
     {
-
+        Task<bool> Contains(Guid id);
+        Task<bool> Contains(Student id);
     }
 }

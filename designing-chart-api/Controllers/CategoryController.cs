@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace designing_chart_api.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
@@ -38,7 +39,6 @@ namespace designing_chart_api.Controllers
 
         // GET: CategoryController/GetAll
         [HttpGet]
-        [ValidateAntiForgeryToken]
         [Route("[action]")]
         public async Task<ActionResult> GetAll()
         {
@@ -48,6 +48,22 @@ namespace designing_chart_api.Controllers
                 return Ok(categories);
             }
             catch(Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+        // POST: ExercisesController/Create
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<ActionResult> Create(string name)
+        {
+            try
+            {
+                await _categoryService.Create(name);
+                return Ok("New category created!");
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
             }

@@ -10,5 +10,6 @@ namespace Business.Contract.Services
     public interface ICategoryService
     {
         public Task<IEnumerable<GetCategoryViewModel>> GetAll();
+        public Task Create(string name);
     }
 }

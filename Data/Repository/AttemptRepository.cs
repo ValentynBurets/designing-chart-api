@@ -29,7 +29,7 @@ namespace Data.Repository
         
         public async Task<Attempt> GetByChart(string chart)
         {
-            return await _DbContext.Attempts.FirstAsync(c => c.Chart == chart);
+            return await _DbContext.Attempts.FirstOrDefaultAsync(c => c.Chart == chart);
         }
     }
 }

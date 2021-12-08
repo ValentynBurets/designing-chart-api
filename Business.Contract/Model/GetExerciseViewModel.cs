@@ -13,6 +13,6 @@ namespace Business.Contract.Model
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime ExpirationDate { get; set; }
-        public StatusType StatusType { get; set; }
+        public string StatusType { get; set; }
     }
 }
