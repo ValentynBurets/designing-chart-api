@@ -28,9 +28,10 @@ namespace designing_chart_api.Controllers
             IEnumerable<StatisticReportModel> statisics = default;
             try
             {
+                statisics = await _statisticsService.GetStatistics(userName, startDate, endDate, category);
+
                 if (User.IsInRole("Admin"))
                 {
-                    statisics = await _statisticsService.GetStatistics(userName, startDate, endDate, category);
                 }
                 else if (User.IsInRole("Student"))
                 {

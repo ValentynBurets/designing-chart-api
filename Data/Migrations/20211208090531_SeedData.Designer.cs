@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20211206181459_SeedData")]
+    [Migration("20211208090531_SeedData")]
     partial class SeedData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,43 +82,43 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0cd7fc69-dae4-4cab-9a39-6e360ad7dcd8"),
+                            Id = new Guid("00bb3458-8225-4906-a0b3-63a11d5685f1"),
                             Chart = "created chart from student",
-                            ExerciseId = new Guid("26f0d744-da7d-4241-893a-c80a16d922b1"),
+                            ExerciseId = new Guid("c781315f-4af0-4c63-a6a3-31b87699f6a2"),
                             FinishTime = new DateTime(2033, 5, 21, 9, 30, 0, 0, DateTimeKind.Unspecified),
                             Mark = 32.0,
                             StartTime = new DateTime(2033, 5, 21, 8, 30, 52, 0, DateTimeKind.Unspecified),
-                            StudentId = new Guid("879d65a3-87ab-41ba-83cd-08d9b5dca1a1")
+                            StudentId = new Guid("1a32c7da-b8df-49eb-76e5-08d9b65ced36")
                         },
                         new
                         {
-                            Id = new Guid("42e521f5-b8eb-4493-ae04-e7fd2b84c3da"),
-                            Chart = "created chart from student",
-                            ExerciseId = new Guid("26f0d744-da7d-4241-893a-c80a16d922b1"),
-                            FinishTime = new DateTime(2033, 5, 21, 9, 30, 0, 0, DateTimeKind.Unspecified),
-                            Mark = 62.0,
-                            StartTime = new DateTime(2033, 5, 21, 8, 30, 52, 0, DateTimeKind.Unspecified),
-                            StudentId = new Guid("879d65a3-87ab-41ba-83cd-08d9b5dca1a1")
+                            Id = new Guid("faa391c9-add3-4baa-9216-3c9365bf2a8b"),
+                            Chart = "created 2 chart from student",
+                            ExerciseId = new Guid("c781315f-4af0-4c63-a6a3-31b87699f6a2"),
+                            FinishTime = new DateTime(2032, 5, 21, 9, 30, 0, 0, DateTimeKind.Unspecified),
+                            Mark = 42.0,
+                            StartTime = new DateTime(2032, 5, 21, 8, 30, 52, 0, DateTimeKind.Unspecified),
+                            StudentId = new Guid("1a32c7da-b8df-49eb-76e5-08d9b65ced36")
                         },
                         new
                         {
-                            Id = new Guid("fe208cc2-d5af-483f-a56b-d687ad544d1d"),
+                            Id = new Guid("3404f021-c85d-4e89-995e-8013291f9307"),
                             Chart = "created chart from student",
-                            ExerciseId = new Guid("26e9767b-a372-4209-9800-ba07637fbe0e"),
+                            ExerciseId = new Guid("c09c4243-e647-4aa2-b117-9f3442f95e19"),
                             FinishTime = new DateTime(2033, 5, 11, 10, 30, 52, 0, DateTimeKind.Unspecified),
                             Mark = 45.0,
                             StartTime = new DateTime(2033, 5, 11, 9, 25, 35, 0, DateTimeKind.Unspecified),
-                            StudentId = new Guid("879d65a3-87ab-41ba-83cd-08d9b5dca1a1")
+                            StudentId = new Guid("1a32c7da-b8df-49eb-76e5-08d9b65ced36")
                         },
                         new
                         {
-                            Id = new Guid("b42d7992-8e08-408e-85d9-8483c4c978d2"),
+                            Id = new Guid("cb0fa235-ba05-4e71-977c-aff885dfb2d0"),
                             Chart = "created chart from student",
-                            ExerciseId = new Guid("26f0d744-da7d-4241-893a-c80a16d922b1"),
+                            ExerciseId = new Guid("c781315f-4af0-4c63-a6a3-31b87699f6a2"),
                             FinishTime = new DateTime(2033, 6, 25, 7, 12, 23, 0, DateTimeKind.Unspecified),
                             Mark = 32.0,
                             StartTime = new DateTime(2033, 6, 25, 6, 32, 53, 0, DateTimeKind.Unspecified),
-                            StudentId = new Guid("8ac2b3ac-1f7c-4ceb-6e4a-08d9b8d6db0e")
+                            StudentId = new Guid("cd6c466a-6b9d-414b-6394-08d9ba292180")
                         });
                 });
 
@@ -141,12 +141,12 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2afd1a8c-5912-45bd-9211-b5b4764fd4a8"),
+                            Id = new Guid("e068e57b-ccfd-4ec5-8c70-20a7d7a2f636"),
                             Name = "CategoryType"
                         },
                         new
                         {
-                            Id = new Guid("c0a1d593-2e33-4311-81ee-5e9d9cbc2304"),
+                            Id = new Guid("130d04d8-4623-4c11-8e35-67df14a0a891"),
                             Name = "SecondCategoryType"
                         });
                 });
@@ -190,8 +190,8 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("26f0d744-da7d-4241-893a-c80a16d922b1"),
-                            CategoryId = new Guid("2afd1a8c-5912-45bd-9211-b5b4764fd4a8"),
+                            Id = new Guid("c781315f-4af0-4c63-a6a3-31b87699f6a2"),
+                            CategoryId = new Guid("e068e57b-ccfd-4ec5-8c70-20a7d7a2f636"),
                             Description = "description for exercise",
                             EtalonChart = "test chart",
                             ExpirationDate = new DateTime(2000, 10, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -201,8 +201,8 @@ namespace Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("26e9767b-a372-4209-9800-ba07637fbe0e"),
-                            CategoryId = new Guid("c0a1d593-2e33-4311-81ee-5e9d9cbc2304"),
+                            Id = new Guid("c09c4243-e647-4aa2-b117-9f3442f95e19"),
+                            CategoryId = new Guid("130d04d8-4623-4c11-8e35-67df14a0a891"),
                             Description = "second description for exercise",
                             EtalonChart = "second test chart",
                             ExpirationDate = new DateTime(2042, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),

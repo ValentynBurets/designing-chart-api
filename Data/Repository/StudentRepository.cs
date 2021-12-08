@@ -19,7 +19,13 @@ namespace Data.Repository
 
         public async Task<bool> Contains(Guid id)
         {
-            return (await _DbContext.Studens.FirstOrDefaultAsync(e => e.Id == id) == null) ? false : true;
+            var o = await _DbContext.Studens.FirstOrDefaultAsync(x => x.Id == id);
+            if (o !=null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> Contains(Student student)

@@ -50,7 +50,7 @@ namespace Data.EF
                     EtalonChart = "second test chart"
                 }
             };
-
+            
             var attempts = new Attempt[]
             {
                 new Attempt()
@@ -60,7 +60,7 @@ namespace Data.EF
                     FinishTime = new DateTime(2033, 5, 21, 9, 30, 00),
                     Mark = 32,
                     ExerciseId = exercises[0].Id,
-                    StudentId = new Guid("879d65a3-87ab-41ba-83cd-08d9b5dca1a1"),
+                    StudentId = new Guid("1a32c7da-b8df-49eb-76e5-08d9b65ced36"),
                     Chart = "created chart from student"
                 },
                 new Attempt()
@@ -70,7 +70,7 @@ namespace Data.EF
                     FinishTime = new DateTime(2032, 5, 21, 9, 30, 00),
                     Mark = 42,
                     ExerciseId = exercises[0].Id,
-                    StudentId = new Guid("879d65a3-87ab-41ba-83cd-08d9b5dca1a1"),
+                    StudentId = new Guid("1a32c7da-b8df-49eb-76e5-08d9b65ced36"),
                     Chart = "created 2 chart from student"
                 },
                 new Attempt()
@@ -80,7 +80,7 @@ namespace Data.EF
                     FinishTime = new DateTime(2033, 5, 11, 10, 30, 52),
                     Mark = 45,
                     ExerciseId = exercises[1].Id,
-                    StudentId = new Guid("879d65a3-87ab-41ba-83cd-08d9b5dca1a1"),
+                    StudentId = new Guid("1a32c7da-b8df-49eb-76e5-08d9b65ced36"),
                     Chart = "created chart from student"
                 },
                 new Attempt()
@@ -90,7 +90,7 @@ namespace Data.EF
                     FinishTime = new DateTime(2033, 6, 25, 7, 12, 23),
                     Mark = 32,
                     ExerciseId = exercises[0].Id,
-                    StudentId = new Guid("8ac2b3ac-1f7c-4ceb-6e4a-08d9b8d6db0e"),
+                    StudentId = new Guid("cd6c466a-6b9d-414b-6394-08d9ba292180"),
                     Chart = "created chart from student"
                 }
             };
