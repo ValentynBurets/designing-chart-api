@@ -9,9 +9,9 @@ namespace Business.Contract.Services
 {
     public interface IProfileDataService
     {
-        public Task<ProfileInfoModel> GetStudentProfileInfoById(Guid id);
+        public Task<UserInfoViewModel> GetStudentProfileInfoById(Guid id);
         public Task<IEnumerable<UserInfoViewModel>> GetAllUsersInfo();
-        public Task<ProfileInfoModel> GetAdminProfileInfoById(Guid id);
+        public Task<UserInfoViewModel> GetAdminProfileInfoById(Guid id);
         public Task UpdateStudentProfileInfoById(ProfileInfoModel model, Guid id);
         public Task UpdateAdminProfileInfoById(ProfileInfoModel model, Guid id);
     }

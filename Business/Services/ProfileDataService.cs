@@ -24,37 +24,37 @@ namespace Business.Services
             _profileManager = profileManager;
         }
 
-        public async Task<ProfileInfoModel> GetStudentProfileInfoById(Guid id)
+        public async Task<UserInfoViewModel> GetStudentProfileInfoById(Guid id)
         {
             //var student = await _unitOfWork.StudentRepository.GetById(id);
             var student = await _unitOfWork.StudentRepository.FirstOrDefault(x=>x.IdLink == id);
-
-
+            var email = await _profileManager.GetEmailByUserId(id);
             if (student == null)
             {
-                throw new Exception("Employee with this id was not found!");
+                throw new Exception("Student with this id was not found!");
             }
 
-            var profileInfo = _mapper.Map<Student, ProfileInfoModel>(student);
+            var profileInfo = _mapper.Map<Student, UserInfoViewModel>(student);
+            profileInfo.Email = email;
 
             return profileInfo;
         }
 
-        public async Task<ProfileInfoModel> GetAdminProfileInfoById(Guid id)
+        public async Task<UserInfoViewModel> GetAdminProfileInfoById(Guid id)
         {
             var admin = await _unitOfWork.AdminRepository.FirstOrDefault(x=>x.IdLink == id);
+            var email = await _profileManager.GetEmailByUserId(id);
 
             if (admin == null)
             {
                 throw new Exception("Admin with this id was not found!");
             }
 
-            var profileInfo = _mapper.Map<Admin, ProfileInfoModel>(admin);
+            var profileInfo = _mapper.Map<Admin, UserInfoViewModel>(admin);
+            profileInfo.Email = email;
 
             return profileInfo;
         }
-
-      
 
         public async Task UpdateStudentProfileInfoById(ProfileInfoModel model, Guid id)
         {
@@ -86,8 +86,6 @@ namespace Business.Services
             await _unitOfWork.Save();
         }
 
-       
-        
         public async Task<IEnumerable<UserInfoViewModel>> GetAllUsersInfo()
         {
             List<UserInfoViewModel> userList = new List<UserInfoViewModel>();
