@@ -56,7 +56,7 @@ namespace designing_chart_api.Controllers
         [Route("info")]
         public async Task<IActionResult> GetMyInfo()
         {
-            ProfileInfoModel profileInfo = null;
+            UserInfoViewModel profileInfo = null;
 
             try
             {

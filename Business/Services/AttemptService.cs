@@ -37,7 +37,7 @@ namespace Business.Services
                 throw new ValidationException($"Exercise with Id{new_attempt.ExerciseId} don`t exists");
             }
 
-            if (await _unitOfWork.StudentRepository.Contains(new_attempt.StudentId))
+            if (await _unitOfWork.StudentRepository.Contains(new_attempt.StudentId) == false)
             {
                 throw new ValidationException("Student with this Id don`t exists");
             }
