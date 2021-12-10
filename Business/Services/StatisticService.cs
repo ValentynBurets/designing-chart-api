@@ -24,7 +24,7 @@ namespace Business.Services
 
         private async Task<double> GetCourseMaxMark() => (await _unitOfWork.ExerciseRepository.GetAll()).Sum(ex => ex.MaxMark);
 
-        private async Task<IEnumerable<StatisticReportModel>> GetUserStatistics(Guid studentId, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        private async Task<IEnumerable<ExerciseResultReport>> GetExercisesStatistics(Guid studentId, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
             var attempts = (await _unitOfWork.AttemptRepository.GetAll())
                 .Where(attempt => attempt.StudentId == studentId);
@@ -35,28 +35,18 @@ namespace Business.Services
             
             attempts = FilterByDateRange(startDate, endDate, attempts);
             
-            List<StatisticReportModel> staticticReports = new();
-            
-            var exerciseGroups = attempts
-                .GroupBy(a => a.ExerciseId)
+            var staticticReports = attempts
+                .GroupBy(a => a.Exercise)
                 .Select(
-                    g => new
+                    g => new ExerciseResultReport
                     {
-                        Name = g.Key,
-                        Attempts = g.Select(p => p)
+                        Id = g.Key.Id,
+                        Title = g.Key.Title,
+                        Attempts = g.Select(p => _mapper.Map<Attempt, AttemptResultReport>(p))
                     }
-                );
-            
-            foreach (var g in exerciseGroups)
-            {
-                staticticReports.Add(
-                    new StatisticReportModel
-                    {
-                        Attempts = _mapper.Map<IEnumerable<Attempt>, IEnumerable<GetAttemptViewModel>>(g.Attempts)
-                    }
-                );
-            }
-            staticticReports.ToList().ForEach(s => s.CoursePercentage = s.MaxMark/ courseMaxMark * 100);
+                ).Select(x=>x).ToList();
+
+            staticticReports.ForEach(s => s.CoursePercentage = s.MaxMark/ courseMaxMark * 100);
 
             return staticticReports;
         }
@@ -93,27 +83,41 @@ namespace Business.Services
             return attempts;
         }
 
-        public async Task<IEnumerable<StatisticReportModel>> GetStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        private async Task<UserStatisticReport> GetUserStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
-            return await GetStatistics(studentId.Value, startDate, endDate, category);
+            var student = (await _unitOfWork.StudentRepository.GetById(studentId.Value));
+            var result = new UserStatisticReport
+            {
+                User = _mapper.Map<Student, ProfileInfoModel>(student)
+            };
+            result.Exercises = await GetExercisesStatistics(studentId.Value, startDate, endDate, category);
+            return result;
         }
 
-        public async Task<IEnumerable<StatisticReportModel>> GetStatistics(string studentName = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        public async Task<IEnumerable<UserStatisticReport>> GetStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
-            var result = new List<StatisticReportModel>();
+            var userStatistics = await GetUserStatistics(studentId, startDate, endDate, category);
+            var result = new List<UserStatisticReport> { userStatistics };
+            return result;
+        }
+
+        public async Task<IEnumerable<UserStatisticReport>> GetStatistics(string studentName = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        {
+            var result = new List<UserStatisticReport>();
             if (string.IsNullOrEmpty(studentName))
             {
                 var students = await _unitOfWork.StudentRepository.GetAll();
                 foreach (Student student in students)
                 {
-
-                    result.AddRange(await GetUserStatistics(student.Id, startDate, endDate, category));
+                    var userReport = await GetUserStatistics(student.Id, startDate, endDate, category);
+                    result.Add(userReport);
                 }
             }
             else 
             {
-                var studentId = (await _unitOfWork.StudentRepository.FirstOrDefault(stud => stud.Name.Contains(studentName) || stud.SurName.Contains(studentName))).Id;
-                result.AddRange(await GetUserStatistics(studentId, startDate, endDate, category));
+                var student = (await _unitOfWork.StudentRepository.FirstOrDefault(stud => stud.Name.Contains(studentName) || stud.SurName.Contains(studentName)));
+                var userReport = await GetUserStatistics(student.Id, startDate, endDate, category);
+                result.Add(userReport);
             }
             return result;
         }

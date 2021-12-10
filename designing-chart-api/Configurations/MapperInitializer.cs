@@ -36,6 +36,12 @@ namespace designing_chart_api.Configurations
             CreateMap<Student, ProfileInfoModel>();
 
             CreateMap<Admin, ProfileInfoModel>();
+
+            CreateMap<Attempt, AttemptResultReport>()
+                .AfterMap((src, dest) =>
+                {
+                    dest.TimeSpend = (src.FinishTime - src.StartTime).ToString(@"d\.hh\:mm\:ss");
+                });
         }
     }
 }

@@ -25,7 +25,7 @@ namespace designing_chart_api.Controllers
         [Route("[action]")]
         public async Task<ActionResult> GetAll(string userName=null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
-            IEnumerable<StatisticReportModel> statisics = default;
+            IEnumerable<UserStatisticReport> statisics = default;
             try
             {
                 if (User.IsInRole("Admin"))
