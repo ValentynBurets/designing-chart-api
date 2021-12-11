@@ -45,12 +45,13 @@ namespace designing_chart_api.Controllers
         {
             try
             {
-                await _attemptService.Create(attempt);
+                //attempt.StudentId = GetUserId();
+                await _attemptService.Create(attempt, GetUserId());
                 return Ok("New attempt created");
             }
             catch(Exception ex)
             {
-                return BadRequest(ex.ToString());
+                return BadRequest(ex.Message);
             }
         }
         //// GET: AttemptController/Edit/5

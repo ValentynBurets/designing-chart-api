@@ -37,12 +37,12 @@ namespace Business.Services
 
             var exercise = _mapper.Map<CreateExerciseViewModel, Exercise>(new_exercise);
 
-            if (await _unitOfWork.ExerciseRepository.Contains(exercise))
-            {
-                throw new ValidationException("Exercise with this data exists");
-            }
+            //if (await _unitOfWork.ExerciseRepository.Contains(exercise) == false) 
+            //{
+            //    throw new ValidationException("Exercise with this data exists");
+            //}
 
-            if (await _unitOfWork.ExerciseRepository.Contains(new_exercise.Title))
+            if (await _unitOfWork.ExerciseRepository.FirstOrDefault(x=>x.Title == new_exercise.Title) != null)
             {
                 throw new ValidationException("Exercise with this title exists");
             }
@@ -54,11 +54,11 @@ namespace Business.Services
                 throw new ValidationException("Category is null");
             }
 
-            if (existed_category == null)
-            {
-                await _unitOfWork.CategoryRepository.Add(new CategoryType() { Name = new_exercise.Category });
-                existed_category = await _unitOfWork.CategoryRepository.GetByCategoryName(new_exercise.Category);
-            }
+            //if (existed_category == null)
+            //{
+            //    await _unitOfWork.CategoryRepository.Add(new CategoryType() { Name = new_exercise.Category });
+            //    existed_category = await _unitOfWork.CategoryRepository.GetByCategoryName(new_exercise.Category);
+            //}
 
             if(new_exercise.EtalonChart == null)
             {

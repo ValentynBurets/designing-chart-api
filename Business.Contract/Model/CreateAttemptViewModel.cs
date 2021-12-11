@@ -11,7 +11,7 @@ namespace Business.Contract.Model
         public DateTime StartTime { get; set; }
         public DateTime FinishTime { get; set; }
         public Guid ExerciseId { get; set; }
-        public Guid StudentId { get; set; }
+        //public Guid StudentId { get; set; }
         public string Chart { get; set; }
     }
 }

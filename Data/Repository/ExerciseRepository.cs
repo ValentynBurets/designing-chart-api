@@ -20,7 +20,7 @@ namespace Data.Repository
 
         public async Task<bool> Contains(string title)
         {
-            return (await _DbContext.Exercises.FirstAsync(e => e.Title == title) == null) ? false : true;
+            return (await _DbContext.Exercises.FirstOrDefaultAsync(e => e.Title == title) == null) ? false : true;
         }
 
         public async Task<bool> Contains(Exercise exercise)

@@ -24,32 +24,33 @@ namespace Business.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Create(CreateAttemptViewModel new_attempt)
+        public async Task Create(CreateAttemptViewModel new_attempt, Guid id)
         {
-            if (await _unitOfWork.AttemptRepository.GetByChart(new_attempt.Chart) != null)
-            {
-                throw new ValidationException("Attempt with this chart exists");
-            }
+            //if (await _unitOfWork.AttemptRepository.GetByChart(new_attempt.Chart) != null)
+            //{
+            //    throw new ValidationException("Attempt with this chart exists");
+            //}
 
             var existed_exercise = await _unitOfWork.ExerciseRepository.GetById(new_attempt.ExerciseId);
             if(existed_exercise == null)
             {
                 throw new ValidationException($"Exercise with Id{new_attempt.ExerciseId} don`t exists");
             }
-
-            if (await _unitOfWork.StudentRepository.Contains(new_attempt.StudentId) == false)
-            {
-                throw new ValidationException("Student with this Id don`t exists");
-            }
+             
+            //if (await _unitOfWork.StudentRepository.Contains(new_attempt.StudentId) == false)
+            //{
+            //    throw new ValidationException("Student with this Id don`t exists");
+            //}
 
             var attempt = _mapper.Map<CreateAttemptViewModel, Attempt>(new_attempt);
+            attempt.StudentId = (await _unitOfWork.StudentRepository.FirstOrDefault(x=>x.IdLink == id)).Id;
 
             var expiration_date = await _unitOfWork.ExerciseRepository.GetExpirationDateByExerciseId(attempt.ExerciseId);
             
-            if(DateTime.Compare(expiration_date, new_attempt.StartTime) < 0)
-            {
-                throw new ValidationException("The student started this exercise too late. solving started later than expiration time allowed.");
-            }
+            //if(DateTime.Compare(expiration_date, new_attempt.StartTime) < 0)
+            //{
+            //    throw new ValidationException("The student started this exercise too late. solving started later than expiration time allowed.");
+            //}
 
             await _unitOfWork.AttemptRepository.Add(attempt);
 
