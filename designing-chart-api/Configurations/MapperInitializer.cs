@@ -40,6 +40,8 @@ namespace designing_chart_api.Configurations
             CreateMap<Attempt, AttemptResultReport>()
                 .AfterMap((src, dest) =>
                 {
+                    dest.StartDate = src.StartTime;
+                    dest.EndDate = src.FinishTime;
                     dest.TimeSpend = (src.FinishTime - src.StartTime).ToString(@"d\.hh\:mm\:ss");
                 });
         }
