@@ -23,7 +23,7 @@ namespace designing_chart_api.Controllers
         // GET: StatisticsController
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult> GetAll(string userName=null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        public async Task<ActionResult> GetAll(string userName=null, DateTime? startDate = null, DateTime? endDate = null, string category = null, string sort = null)
         {
             IEnumerable<UserStatisticReport> statisics = default;
             try
@@ -31,11 +31,11 @@ namespace designing_chart_api.Controllers
 
                 if (User.IsInRole("Admin"))
                 {
-                    statisics = await _statisticsService.GetStatistics(userName, startDate, endDate, category);
+                    statisics = await _statisticsService.GetStatistics(userName, startDate, endDate, category, sort);
                 }
                 else if (User.IsInRole("Student"))
                 {
-                    statisics = await _statisticsService.GetStatistics(GetUserId(), startDate, endDate, category);
+                    statisics = await _statisticsService.GetStatistics(GetUserId(), startDate, endDate, category, sort);
                 }
                 return Ok(statisics);
             }

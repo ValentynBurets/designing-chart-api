@@ -24,7 +24,7 @@ namespace Business.Services
 
         private async Task<double> GetCourseMaxMark() => (await _unitOfWork.ExerciseRepository.GetAll()).Sum(ex => ex.MaxMark);
 
-        private async Task<IEnumerable<ExerciseResultReport>> GetExercisesStatistics(Guid studentId, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        private async Task<IEnumerable<ExerciseResultReport>> GetExercisesStatistics(Guid studentId, DateTime? startDate = null, DateTime? endDate = null, string category = null, string sort = null)
         {
 
             var attempts = (await _unitOfWork.AttemptRepository.GetAll())
@@ -47,9 +47,30 @@ namespace Business.Services
                     }
                 ).Select(x=>x).ToList();
 
+            staticticReports = OrderByCriterion(sort, staticticReports).ToList();
             staticticReports.ForEach(s => s.CoursePercentage = s.MaxMark/ courseMaxMark * 100);
 
             return staticticReports;
+        }
+
+        private static IEnumerable<ExerciseResultReport> OrderByCriterion(string sortCriterion, IEnumerable<ExerciseResultReport> exerciseResults) 
+        {
+            if (!string.IsNullOrEmpty(sortCriterion)) 
+            {
+                exerciseResults = sortCriterion switch 
+                {
+                    "maxMarkDesc" => exerciseResults.OrderByDescending(e => e.MaxMark),
+                    "maxMarkAsc" => exerciseResults.OrderBy(e => e.MaxMark),
+                    "averageMarkDesc" => exerciseResults.OrderByDescending(e => e.AverageMark),
+                    "averageMarkAsc" => exerciseResults.OrderBy(e => e.AverageMark),
+                    "coursePercentageDesc" => exerciseResults.OrderByDescending(e => e.CoursePercentage),
+                    "coursePercentageAsc" => exerciseResults.OrderBy(e => e.CoursePercentage),
+                    "attemptsCountDesc" => exerciseResults.OrderByDescending(e => e.Attempts.Count()),
+                    "attemptsCountAsc" => exerciseResults.OrderBy(e => e.Attempts.Count())
+                };
+            }
+            return exerciseResults;
+
         }
 
         private static IEnumerable<Attempt> FilterByDateRange(DateTime? startDate, DateTime? endDate, IEnumerable<Attempt> attempts)
@@ -84,28 +105,28 @@ namespace Business.Services
             return attempts;
         }
 
-        private async Task<UserStatisticReport> GetUserStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        private async Task<UserStatisticReport> GetUserStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null, string sort = null)
         {
             var student = (await _unitOfWork.StudentRepository.GetById(studentId.Value));
             var result = new UserStatisticReport
             {
                 User = _mapper.Map<Student, ProfileInfoModel>(student)
             };
-            result.Exercises = await GetExercisesStatistics(studentId.Value, startDate, endDate, category);
+            result.Exercises = await GetExercisesStatistics(studentId.Value, startDate, endDate, category, sort);
             return result;
         }
 
-        public async Task<IEnumerable<UserStatisticReport>> GetStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        public async Task<IEnumerable<UserStatisticReport>> GetStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null, string sort = null)
         {
             var id = await GetStudentIdAsync(studentId.Value);
-            var userStatistics = await GetUserStatistics(id, startDate, endDate, category);
+            var userStatistics = await GetUserStatistics(id, startDate, endDate, category, sort);
             var result = new List<UserStatisticReport> { userStatistics };
             return result;
         }
 
         private async Task<Guid> GetStudentIdAsync(Guid idLink) => (await _unitOfWork.StudentRepository.FirstOrDefault(x => x.IdLink == idLink)).Id;
 
-        public async Task<IEnumerable<UserStatisticReport>> GetStatistics(string studentName = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
+        public async Task<IEnumerable<UserStatisticReport>> GetStatistics(string studentName = null, DateTime? startDate = null, DateTime? endDate = null, string category = null, string sort = null)
         {
             var result = new List<UserStatisticReport>();
             var students = await _unitOfWork.StudentRepository.GetAll();
@@ -117,7 +138,7 @@ namespace Business.Services
             {
                 foreach (Student student in students)
                 {
-                    var userReport = await GetUserStatistics(student.Id, startDate, endDate, category);
+                    var userReport = await GetUserStatistics(student.Id, startDate, endDate, category, sort);
                     result.Add(userReport);
                 }
 
