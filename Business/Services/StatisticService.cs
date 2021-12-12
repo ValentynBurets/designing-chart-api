@@ -26,6 +26,7 @@ namespace Business.Services
 
         private async Task<IEnumerable<ExerciseResultReport>> GetExercisesStatistics(Guid studentId, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
+
             var attempts = (await _unitOfWork.AttemptRepository.GetAll())
                 .Where(attempt => attempt.StudentId == studentId);
 
@@ -85,7 +86,7 @@ namespace Business.Services
 
         private async Task<UserStatisticReport> GetUserStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
-            var student = (await _unitOfWork.StudentRepository.FirstOrDefault(x=>x.IdLink == studentId));
+            var student = (await _unitOfWork.StudentRepository.GetById(studentId.Value));
             var result = new UserStatisticReport
             {
                 User = _mapper.Map<Student, ProfileInfoModel>(student)
@@ -96,28 +97,30 @@ namespace Business.Services
 
         public async Task<IEnumerable<UserStatisticReport>> GetStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
-            var userStatistics = await GetUserStatistics(studentId, startDate, endDate, category);
+            var id = await GetStudentIdAsync(studentId.Value);
+            var userStatistics = await GetUserStatistics(id, startDate, endDate, category);
             var result = new List<UserStatisticReport> { userStatistics };
             return result;
         }
 
+        private async Task<Guid> GetStudentIdAsync(Guid idLink) => (await _unitOfWork.StudentRepository.FirstOrDefault(x => x.IdLink == idLink)).Id;
+
         public async Task<IEnumerable<UserStatisticReport>> GetStatistics(string studentName = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
             var result = new List<UserStatisticReport>();
-            if (string.IsNullOrEmpty(studentName))
+            var students = await _unitOfWork.StudentRepository.GetAll();
+            if (!string.IsNullOrEmpty(studentName))
             {
-                var students = await _unitOfWork.StudentRepository.GetAll();
+                students = students.Where(stud => stud.Name.ToLower().Contains(studentName.ToLower()) || stud.SurName.ToLower().Contains(studentName.ToLower()));
+            }
+            if (students.ToList().Count > 0)
+            {
                 foreach (Student student in students)
                 {
                     var userReport = await GetUserStatistics(student.Id, startDate, endDate, category);
                     result.Add(userReport);
                 }
-            }
-            else 
-            {
-                var student = (await _unitOfWork.StudentRepository.FirstOrDefault(stud => stud.Name.Contains(studentName) || stud.SurName.Contains(studentName)));
-                var userReport = await GetUserStatistics(student.Id, startDate, endDate, category);
-                result.Add(userReport);
+
             }
             return result;
         }
