@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace Business.Contract.Model
 {
-    public class GetExerciseViewModel
+    public class GetFullExerciseViewModel
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime ExpirationDate { get; set; }
         public string StatusType { get; set; }
+        public string EtalonChart { get; set; }
         public double MaxMark { get; set; }
-        public string CategoryTypeName { get; set; }
+        public string CategoryName { get; set; }
     }
 }

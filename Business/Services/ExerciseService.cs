@@ -84,14 +84,14 @@ namespace Business.Services
             await _unitOfWork.Save();
         }
 
-        public async Task<GetExerciseViewModel> GetById(Guid Id)
+        public async Task<GetFullExerciseViewModel> GetById(Guid Id)
         {
             var exercise = await _unitOfWork.ExerciseRepository.GetById(Id);
 
             if (exercise == null)
                 throw new ValidationException($"Can't find exercise with Id ({Id}). Operation canceled");
 
-            var exerciseViewModel = _mapper.Map<GetExerciseViewModel>(exercise);
+            var exerciseViewModel = _mapper.Map<GetFullExerciseViewModel>(exercise);
 
             return exerciseViewModel;
         }
@@ -118,6 +118,7 @@ namespace Business.Services
             existed_exercise.ExpirationDate = exercise.ExpirationDate;
             existed_exercise.MaxMark = exercise.MaxMark;
             existed_exercise.Title = exercise.Title;
+            existed_exercise.Description = exercise.Description;
 
             await _unitOfWork.ExerciseRepository.Update(existed_exercise);
             await _unitOfWork.Save();

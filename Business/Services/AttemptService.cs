@@ -10,6 +10,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Business.Services
 {
@@ -46,12 +47,13 @@ namespace Business.Services
             attempt.StudentId = (await _unitOfWork.StudentRepository.FirstOrDefault(x=>x.IdLink == id)).Id;
 
             var expiration_date = await _unitOfWork.ExerciseRepository.GetExpirationDateByExerciseId(attempt.ExerciseId);
-            
+
             //if(DateTime.Compare(expiration_date, new_attempt.StartTime) < 0)
             //{
             //    throw new ValidationException("The student started this exercise too late. solving started later than expiration time allowed.");
             //}
-            var percent = CalculateSimilarity(attempt.Chart, existed_exercise.EtalonChart);
+            var percent = CalculateSimilarity(Simplify(attempt.Chart), Simplify(existed_exercise.EtalonChart));
+            // percent = CalculateSimilarity(attempt.Chart, existed_exercise.EtalonChart);
             attempt.Mark = existed_exercise.MaxMark * percent;
 
             await _unitOfWork.AttemptRepository.Add(attempt);
@@ -73,7 +75,7 @@ namespace Business.Services
 
             //calculate mark
 
-            var percent = CalculateSimilarity(student_chart, etalon_chart);
+            var percent = CalculateSimilarity(Simplify(student_chart), Simplify(etalon_chart));
 
             attempt.Mark = attempt.Exercise.MaxMark * percent / 100;
 
@@ -82,6 +84,41 @@ namespace Business.Services
 
             return attemptViewModels;
         }
+
+        private string Simplify(string chart)
+        {
+            dynamic obj = JsonConvert.DeserializeObject<dynamic>(chart);
+            StringBuilder stringify = new StringBuilder();
+            var connections = new object[obj.connectors.Count];
+            for (var i = 0; i < obj.connectors.Count; i++)
+            {
+                (string, string) sourceID = ("", "");
+                (string, string) targetID = ("", "");
+                for (var j = 0; j < obj.nodes.Count; j++)
+                {
+                    if (obj.nodes[j].id == obj.connectors[i].sourceID)
+                    {
+                        sourceID = (obj.nodes[j].shape.type, obj.nodes[j].shape.shape);
+                    }
+                    if (obj.nodes[j].id == obj.connectors[i].targetID)
+                    {
+                        targetID = (obj.nodes[j].shape.type, obj.nodes[j].shape.shape);
+                    }
+                }
+                var feed = new
+                {
+                    type = obj.connectors[i].type,
+                    sourceID = sourceID.Item1 + sourceID.Item2,
+                    targetID = targetID.Item1 + targetID.Item2
+                };
+                connections[i] = feed;
+                stringify.Append(
+                    $"[type:{feed.type.ToString()},sourceID:{feed.sourceID.ToString()},targetID:{feed.targetID.ToString()}]");
+            }
+
+            return stringify.ToString();
+        }
+
 
         private int ComputeLevenshteinDistance(string source, string target)
         {
