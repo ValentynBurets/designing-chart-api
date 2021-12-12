@@ -51,6 +51,8 @@ namespace Business.Services
             //{
             //    throw new ValidationException("The student started this exercise too late. solving started later than expiration time allowed.");
             //}
+            var percent = CalculateSimilarity(attempt.Chart, existed_exercise.EtalonChart);
+            attempt.Mark = existed_exercise.MaxMark * percent;
 
             await _unitOfWork.AttemptRepository.Add(attempt);
 

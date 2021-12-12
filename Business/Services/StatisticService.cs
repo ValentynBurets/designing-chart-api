@@ -85,7 +85,7 @@ namespace Business.Services
 
         private async Task<UserStatisticReport> GetUserStatistics(Guid? studentId = null, DateTime? startDate = null, DateTime? endDate = null, string category = null)
         {
-            var student = (await _unitOfWork.StudentRepository.GetById(studentId.Value));
+            var student = (await _unitOfWork.StudentRepository.FirstOrDefault(x=>x.IdLink == studentId));
             var result = new UserStatisticReport
             {
                 User = _mapper.Map<Student, ProfileInfoModel>(student)
