@@ -26,6 +26,7 @@ namespace designing_chart_api.Controllers
         #region Info data
 
         [HttpGet]
+        [Authorize]
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
